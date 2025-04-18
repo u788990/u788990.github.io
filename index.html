@@ -354,7 +354,7 @@
         // OAuth 授权管理
         function authorize() {
             const clientId = 'Ov23liebOt7D3zd1xIrU'; // 替换为你的 Client ID
-            const repo = 'u788990.github.io'; // 替换为你的仓库
+            const repo = 'u788990/u788990.github.io'; // 替换为你的仓库
             const baseUrl = window.location.origin; // 动态获取当前地址
             const state = encodeURIComponent(baseUrl);
             const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo&redirect_uri=https://myproject.com/callback.html&state=${state}`;
