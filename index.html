@@ -1,364 +1,71 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人网址导航 - BieKuai</title>
+    <title>别快导航</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            display: flex;
-            background: #f5f5f5;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        .sidebar {
-            width: 200px;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 8px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        h1 {
+            text-align: center;
         }
-        .sidebar h3 {
-            margin: 0 0 10px;
-            color: #333;
-            font-size: 18px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar li {
-            padding: 8px 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: background 0.2s;
-        }
-        .sidebar li:hover {
-            background: #f0f0f0;
-        }
-        .sidebar ul ul {
-            margin-left: 15px;
-        }
-        .content {
-            margin-left: 240px;
-            max-width: 1000px;
-            width: 100%;
-        }
-        .content h1 {
-            color: #222;
-            font-size: 24px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-        #toggle-mode {
-            padding: 8px 12px;
-            margin-left: 10px;
-            border: none;
-            border-radius: 4px;
-            background: #17a2b8;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        #toggle-mode:hover {
-            background: #138496;
-        }
-        .save-btn, .restore-btn, .online-restore-btn, .online-save-btn, .auto-update-btn, .auth-btn {
-            padding: 8px 12px;
-            margin-left: 10px;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .save-btn {
-            background: #ffc107;
-        }
-        .save-btn:hover {
-            background: #e0a800;
-        }
-        .restore-btn {
-            background: #28a745;
-        }
-        .restore-btn:hover {
-            background: #218838;
-        }
-        .online-restore-btn {
-            background: #007bff;
-        }
-        .online-restore-btn:hover {
-            background: #0056b3;
-        }
-        .online-save-btn, .auto-update-btn {
-            background: #6c757d;
-        }
-        .online-save-btn.enabled, .auto-update-btn.enabled {
-            background: #dc3545;
-        }
-        .online-save-btn.enabled:hover, .auto-update-btn.enabled:hover {
-            background: #c82333;
-        }
-        .auth-btn {
-            background: #17a2b8;
-        }
-        .auth-btn:hover {
-            background: #138496;
-        }
-        #data-file {
-            display: none;
-        }
-        .category {
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .subcategory {
-            margin: 10px 0 10px 20px;
-            padding: 10px;
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 5px;
-        }
-        .urls {
-            margin: 5px 0 5px 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .url {
-            padding: 4px 0;
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: calc((100% - 40px) / 5);
-            box-sizing: border-box;
-            min-height: 60px;
-        }
-        .url img {
-            width: 100%;
-            height: auto;
-            max-height: 34px;
-            object-fit: contain;
-            margin: 6px 1px 2px 2px;
-        }
-        .url-icon-link {
-            width: 50%;
-            display: block;
-            cursor: pointer;
-        }
-        .url-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            width: 50%;
-            padding-right: 3px;
-        }
-        .url-main {
-            display: flex;
-            align-items: flex-start;
-            gap: 1px;
-            width: 100%;
-        }
-        .url-actions {
-            display: flex;
-            gap: 5px;
-            margin: 5px 0 5px 2px;
-        }
-        .url-name {
-            color: #007bff;
-            font-weight: bold;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.2;
-        }
-        .url-desc {
-            color: #666;
-            font-size: 12px;
-            line-height: 1.2;
-            max-height: 2.4em;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 5px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        textarea {
-            height: 60px;
-            resize: vertical;
+        .button-group {
+            margin: 20px 0;
+            text-align: center;
         }
         button {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 4px;
+            padding: 10px 20px;
+            margin: 5px;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        .add-btn {
-            background: #28a745;
-            color: white;
-        }
-        .add-btn:hover {
-            background: #218838;
-        }
-        .edit-btn {
-            background: #007bff;
-            color: white;
-        }
-        .edit-btn:hover {
-            background: #0056b3;
-        }
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-        }
-        .delete-btn:disabled {
-            background: #6c757d;
-            color: white;
+        button:disabled {
             cursor: not-allowed;
+            opacity: 0.5;
         }
-        .move-btn {
-            background: #6c757d;
-            color: white;
-            padding: 8px 8px;
-            font-size: 12px;
-        }
-        .move-btn:hover {
-            background: #5a6268;
-        }
-        .move-btn:disabled {
-            background: #adb5bd;
-            cursor: not-allowed;
-        }
-        .hidden {
-            display: none;
-        }
-        @media (max-width: 1200px) {
-            .url {
-                width: calc((100% - 20px) / 3);
-            }
-        }
-        @media (max-width: 800px) {
-            .url {
-                width: calc((100% - 10px) / 2);
-            }
-        }
-        @media (max-width: 400px) {
-            .url {
-                width: 100%;
-            }
+        #data {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h3>分类导航</h3>
-        <ul id="nav"></ul>
+    <h1>别快导航</h1>
+    <div class="button-group">
+        <button id="authorizeBtn" onclick="authorize()">授权管理</button>
+        <button id="saveBtn" onclick="onlineSave()" disabled>在线保存</button>
+        <button id="autoUpdateBtn" onclick="toggleAutoUpdate()" disabled>自动更新（关）</button>
     </div>
-    <div class="content">
-        <h1>个人网址导航 - BieKuai</h1>
-        <button id="toggle-mode" onclick="toggleMode()">进入</button>
-        <button class="save-btn hidden" onclick="saveData()">保存备份</button>
-        <button class="restore-btn hidden" onclick="document.getElementById('data-file').click()">还原备份</button>
-        <button class="online-restore-btn hidden" onclick="onlineRestore()">在线还原</button>
-        <button class="online-save-btn hidden" onclick="onlineSave()">在线保存</button>
-        <button class="auto-update-btn hidden" onclick="toggleAutoUpdate()">自动更新 <span id="auto-update-status">关闭</span></button>
-        <button class="auth-btn hidden" onclick="authorize()">授权管理</button>
-        <input type="file" id="data-file" accept=".json">
-        <div id="categories"></div>
-        <button class="add-btn hidden" onclick="addCategory()">添加分类</button>
-    </div>
+    <textarea id="data" placeholder="在这里输入导航数据（JSON 格式）"></textarea>
 
     <script>
-        const defaultCategories = [
-            {
-                id: 'cat1',
-                name: '常用网站',
-                isEditing: false,
-                urls: [
-                    { id: 'url1', name: 'Google', url: 'https://www.google.com', desc: '全球搜索引擎', icon: 'https://www.google.com/favicon.ico', isEditing: false },
-                    { id: 'url2', name: 'GitHub', url: 'https://github.com', desc: '代码托管平台', icon: 'https://github.com/favicon.ico', isEditing: false }
-                ],
-                subcategories: []
-            },
-            {
-                id: 'cat2',
-                name: '学习资源',
-                isEditing: false,
-                urls: [],
-                subcategories: [
-                    {
-                        id: 'subcat1',
-                        name: '编程教程',
-                        isEditing: false,
-                        urls: [
-                            { id: 'url3', name: 'MDN', url: 'https://developer.mozilla.org', desc: 'Web开发文档', icon: 'https://developer.mozilla.org/favicon.ico', isEditing: false }
-                        ]
-                    }
-                ]
-            }
-        ];
+        let accessToken = localStorage.getItem('access_token') || '';
+        let autoUpdateInterval = null;
 
-        const fileName = window.location.pathname.split('/').pop().replace(/\.[^/.]+$/, '') || 'index';
-        const storageKey = `webstack-${fileName}`;
+        // 初始化按钮状态
+        updateButtonStates();
 
-        let categories = loadCategories();
-        let isEditMode = false;
-        let isDataSaved = true;
-        let backupFiles = [];
-        let accessToken = null;
-        let autoUpdateEnabled = false; // 默认关闭
-
-        function loadCategories() {
-            try {
-                const saved = localStorage.getItem(storageKey);
-                if (saved) {
-                    return JSON.parse(saved);
-                }
-                return JSON.parse(JSON.stringify(defaultCategories));
-            } catch (e) {
-                console.error('LoadCategories Error:', e);
-                return JSON.parse(JSON.stringify(defaultCategories));
-            }
-        }
-
-        function saveCategories() {
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(categories));
-            } catch (e) {
-                console.error('SaveCategories Error:', e);
-                alert('无法保存数据，可能是存储空间不足或浏览器设置限制。');
-            }
-        }
-
-        // OAuth 授权管理
+        // 授权函数
         function authorize() {
-            const clientId = 'Ov23liebOt7D3zd1xIrU'; // 替换为你的 Client ID
-            const repo = 'u788990/u788990.github.io'; // 替换为你的仓库
-            const baseUrl = window.location.origin; // 动态获取当前地址
+            const clientId = 'YOUR_CLIENT_ID'; // 替换为你的 Client ID
+            const repo = 'u788990/u788990.github.io'; // 你的仓库
+            const baseUrl = window.location.origin; // 动态获取，例如 https://u788990.github.io
+            const redirectUri = 'https://u788990.github.io/callback.html'; // 硬编码，确保匹配 GitHub 设置
             const state = encodeURIComponent(baseUrl);
-            const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo&redirect_uri=https://myproject.com/callback.html&state=${state}`;
+            const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`;
+            
+            console.log('Authorization URL:', authUrl); // 调试用
+            
             const popup = window.open(authUrl, 'github-oauth', 'width=600,height=600');
+            if (!popup) {
+                alert('请允许弹出窗口以完成授权！');
+                return;
+            }
             window.addEventListener('message', (event) => {
                 if (event.origin === baseUrl && event.data.access_token) {
                     accessToken = event.data.access_token;
@@ -366,746 +73,146 @@
                     popup.close();
                     updateButtonStates();
                     alert('授权成功！在线保存和自动更新已启用。');
+                } else if (event.origin === baseUrl && event.data.error) {
+                    alert('授权失败：' + event.data.error);
+                    popup.close();
                 }
             });
         }
 
         // 更新按钮状态
         function updateButtonStates() {
-            const onlineSaveBtn = document.querySelector('.online-save-btn');
-            const autoUpdateBtn = document.querySelector('.auto-update-btn');
+            const saveBtn = document.getElementById('saveBtn');
+            const autoUpdateBtn = document.getElementById('autoUpdateBtn');
             if (accessToken) {
-                onlineSaveBtn.classList.add('enabled');
-                autoUpdateBtn.classList.add('enabled');
+                saveBtn.disabled = false;
+                autoUpdateBtn.disabled = false;
             } else {
-                onlineSaveBtn.classList.remove('enabled');
-                autoUpdateBtn.classList.remove('enabled');
-            }
-        }
-
-        // 在线还原
-        async function onlineRestore() {
-            try {
-                const response = await fetch('./biekuai.json');
-                if (response.ok) {
-                    const data = await response.json();
-                    categories = data.categories || categories; // 只还原分类和网址
-                    isDataSaved = false;
-                    saveCategories();
-                    renderCategories();
-                    alert('在线数据已还原！');
-                } else {
-                    alert('没有保存');
+                saveBtn.disabled = true;
+                autoUpdateBtn.disabled = true;
+                if (autoUpdateInterval) {
+                    clearInterval(autoUpdateInterval);
+                    autoUpdateInterval = null;
+                    autoUpdateBtn.textContent = '自动更新（关）';
                 }
-            } catch (e) {
-                console.error('OnlineRestore Error:', e);
-                alert('没有保存');
             }
         }
 
         // 在线保存
         async function onlineSave() {
-            if (!accessToken) {
-                alert('请先授权');
+            const data = document.getElementById('data').value;
+            try {
+                JSON.parse(data); // 验证 JSON 格式
+            } catch (e) {
+                alert('数据格式错误，请输入有效的 JSON！');
                 return;
             }
+
+            const filePath = 'biekuai.json';
+            const message = 'Update biekuai.json via web app';
+            const content = btoa(unescape(encodeURIComponent(data))); // Base64 编码
+
             try {
-                const filePath = 'biekuai.json';
-                const repo = 'username/my-open-project'; // 替换为你的仓库
-                const data = {
-                    categories,
-                    autoUpdateEnabled
-                };
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-
-                // 检查文件是否存在
-                let sha = null;
-                try {
-                    const fileResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
-                        headers: { Authorization: `Bearer ${accessToken}` }
-                    });
-                    if (fileResponse.ok) {
-                        const fileData = await fileResponse.json();
-                        sha = fileData.sha;
+                // 获取当前文件内容（如果存在）
+                const getFileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `token ${accessToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
-                } catch (e) {
-                    console.log('File does not exist, will create new');
-                }
+                });
+                const getFileData = await getFileRes.json();
 
-                // 保存文件
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+                // 更新文件
+                const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
                     method: 'PUT',
                     headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Accept': 'application/vnd.github+json'
+                        'Authorization': `token ${accessToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     },
                     body: JSON.stringify({
-                        message: 'Update biekuai.json',
-                        content: content,
-                        sha: sha
+                        message,
+                        content,
+                        sha: getFileData.sha // 需要文件的 SHA 用于更新
                     })
                 });
-                if (response.ok) {
-                    alert('在线保存成功！');
+
+                if (updateRes.ok) {
+                    alert('保存成功！');
                 } else {
-                    alert('保存失败，请检查权限或网络');
+                    const errorData = await updateRes.json();
+                    alert('保存失败：' + (errorData.message || '未知错误'));
                 }
             } catch (e) {
-                console.error('OnlineSave Error:', e);
-                alert('保存失败：' + e.message);
+                // 如果文件不存在，创建新文件
+                if (e.message.includes('404')) {
+                    const createRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${accessToken}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            message,
+                            content
+                        })
+                    });
+
+                    if (createRes.ok) {
+                        alert('保存成功！');
+                    } else {
+                        const errorData = await createRes.json();
+                        alert('保存失败：' + (errorData.message || '未知错误'));
+                    }
+                } else {
+                    alert('保存失败：' + e.message);
+                }
             }
         }
 
-        // 自动更新
-        async function toggleAutoUpdate() {
-            if (!accessToken) {
-                alert('请先授权');
-                return;
+        // 切换自动更新
+        function toggleAutoUpdate() {
+            const autoUpdateBtn = document.getElementById('autoUpdateBtn');
+            if (autoUpdateInterval) {
+                clearInterval(autoUpdateInterval);
+                autoUpdateInterval = null;
+                autoUpdateBtn.textContent = '自动更新（关）';
+                alert('自动更新已关闭');
+            } else {
+                autoUpdateInterval = setInterval(() => {
+                    onlineSave();
+                }, 300000); // 每 5 分钟保存一次
+                autoUpdateBtn.textContent = '自动更新（开）';
+                alert('自动更新已开启，每 5 分钟保存一次');
+                onlineSave(); // 立即保存一次
             }
-            autoUpdateEnabled = !autoUpdateEnabled;
-            const statusSpan = document.getElementById('auto-update-status');
-            statusSpan.textContent = autoUpdateEnabled ? '开启' : '关闭';
+        }
 
-            // 保存到 biekuai.json
+        // 加载现有数据（可选）
+        async function loadData() {
+            if (!accessToken) return;
+            const filePath = 'biekuai.json';
             try {
-                const filePath = 'biekuai.json';
-                const repo = 'username/my-open-project'; // 替换为你的仓库
-                const data = {
-                    categories,
-                    autoUpdateEnabled
-                };
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-
-                // 检查文件是否存在
-                let sha = null;
-                try {
-                    const fileResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
-                        headers: { Authorization: `Bearer ${accessToken}` }
-                    });
-                    if (fileResponse.ok) {
-                        const fileData = await fileResponse.json();
-                        sha = fileData.sha;
-                    }
-                } catch (e) {
-                    console.log('File does not exist, will create new');
-                }
-
-                // 保存文件
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
-                    method: 'PUT',
+                const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+                    method: 'GET',
                     headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Accept': 'application/vnd.github+json'
-                    },
-                    body: JSON.stringify({
-                        message: 'Update auto-update status in biekuai.json',
-                        content: content,
-                        sha: sha
-                    })
-                });
-                if (!response.ok) {
-                    alert('更新失败，请检查权限或网络');
-                }
-            } catch (e) {
-                console.error('ToggleAutoUpdate Error:', e);
-                alert('更新失败：' + e.message);
-            }
-        }
-
-        // 还原备份（已有逻辑）
-        document.getElementById('data-file').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    categories = JSON.parse(event.target.result);
-                    isDataSaved = false;
-                    saveCategories();
-                    renderCategories();
-                    alert('数据已从备份还原！');
-                } catch (err) {
-                    console.error('Load Error:', err);
-                    alert('加载失败，无效的JSON文件。');
-                }
-            };
-            reader.readAsText(file);
-            e.target.value = '';
-        });
-
-        function generateBackupFilename() {
-            const now = new Date();
-            const timestamp = `${now.getFullYear()}${padZero(now.getMonth() + 1)}${padZero(now.getDate())}-${padZero(now.getHours())}${padZero(now.getMinutes())}${padZero(now.getSeconds())}`;
-            let filename = `backup-${timestamp}.json`;
-            let counter = 1;
-            while (backupFiles.includes(filename)) {
-                filename = `backup-${timestamp}-${counter}.json`;
-                counter++;
-            }
-            backupFiles.push(filename);
-            return filename;
-        }
-
-        function padZero(num) {
-            return num < 10 ? `0${num}` : num;
-        }
-
-        function saveData() {
-            try {
-                const dataStr = JSON.stringify(categories, null, 2);
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const filename = generateBackupFilename();
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                a.click();
-                URL.revokeObjectURL(url);
-                isDataSaved = true;
-                saveCategories();
-                alert(`数据已保存为 ${filename}！请保存到 HTML 文件目录。`);
-            } catch (e) {
-                console.error('SaveData Error:', e);
-                alert('保存备份失败，请检查控制台！');
-            }
-        }
-
-        function getFaviconUrl(url) {
-            try {
-                const urlObj = new URL(url);
-                return `${urlObj.origin}/favicon.ico`;
-            } catch (e) {
-                console.error('Invalid URL for favicon:', url, e);
-                return 'https://example.com/favicon.ico';
-            }
-        }
-
-        function moveCategory(id, direction) {
-            try {
-                const index = categories.findIndex(c => c.id === id);
-                if (index === -1) return;
-                if (direction === 'up' && index > 0) {
-                    [categories[index], categories[index - 1]] = [categories[index - 1], categories[index]];
-                } else if (direction === 'down' && index < categories.length - 1) {
-                    [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
-                } else {
-                    return;
-                }
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('MoveCategory Error:', e);
-            }
-        }
-
-        function moveSubcategory(catId, subcatId, direction) {
-            try {
-                const cat = categories.find(c => c.id === catId);
-                if (!cat) return;
-                const subcats = cat.subcategories;
-                const index = subcats.findIndex(s => s.id === subcatId);
-                if (index === -1) return;
-                if (direction === 'up' && index > 0) {
-                    [subcats[index], subcats[index - 1]] = [subcats[index - 1], subcats[index]];
-                } else if (direction === 'down' && index < subcats.length - 1) {
-                    [subcats[index], subcats[index + 1]] = [subcats[index + 1], subcats[index]];
-                } else {
-                    return;
-                }
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('MoveSubcategory Error:', e);
-            }
-        }
-
-        function moveUrl(id, direction) {
-            try {
-                for (const cat of categories) {
-                    const urlIndex = cat.urls.findIndex(u => u.id === id);
-                    if (urlIndex !== -1) {
-                        if (direction === 'up' && urlIndex > 0) {
-                            [cat.urls[urlIndex], cat.urls[urlIndex - 1]] = [cat.urls[urlIndex - 1], cat.urls[urlIndex]];
-                        } else if (direction === 'down' && urlIndex < cat.urls.length - 1) {
-                            [cat.urls[urlIndex], cat.urls[urlIndex + 1]] = [cat.urls[urlIndex + 1], cat.urls[urlIndex]];
-                        } else {
-                            return;
-                        }
-                        isDataSaved = false;
-                        saveCategories();
-                        renderCategories();
-                        return;
-                    }
-                    for (const subcat of cat.subcategories) {
-                        const subUrlIndex = subcat.urls.findIndex(u => u.id === id);
-                        if (subUrlIndex !== -1) {
-                            if (direction === 'up' && subUrlIndex > 0) {
-                                [subcat.urls[subUrlIndex], subcat.urls[subUrlIndex - 1]] = [subcat.urls[subUrlIndex - 1], subcat.urls[subUrlIndex]];
-                            } else if (direction === 'down' && subUrlIndex < subcat.urls.length - 1) {
-                                [subcat.urls[subUrlIndex], subcat.urls[subUrlIndex + 1]] = [subcat.urls[subUrlIndex + 1], subcat.urls[subUrlIndex]];
-                            } else {
-                                return;
-                            }
-                            isDataSaved = false;
-                            saveCategories();
-                            renderCategories();
-                            return;
-                        }
-                    }
-                }
-            } catch (e) {
-                console.error('MoveUrl Error:', e);
-            }
-        }
-
-        function renderNav() {
-            try {
-                const nav = document.getElementById('nav');
-                if (!nav) throw new Error('Nav element not found');
-                nav.innerHTML = '';
-                categories.forEach(cat => {
-                    const li = document.createElement('li');
-                    li.textContent = cat.name;
-                    li.onclick = () => {
-                        const target = document.getElementById(cat.id);
-                        if (target) target.scrollIntoView({ behavior: 'smooth' });
-                    };
-                    nav.appendChild(li);
-
-                    if (cat.subcategories.length) {
-                        const subUl = document.createElement('ul');
-                        cat.subcategories.forEach(subcat => {
-                            const subLi = document.createElement('li');
-                            subLi.textContent = subcat.name;
-                            subLi.onclick = () => {
-                                const target = document.getElementById(subcat.id);
-                                if (target) target.scrollIntoView({ behavior: 'smooth' });
-                            };
-                            subUl.appendChild(subLi);
-                        });
-                        nav.appendChild(subUl);
+                        'Authorization': `token ${accessToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
                 });
+                if (res.ok) {
+                    const data = await res.json();
+                    const content = decodeURIComponent(escape(atob(data.content)));
+                    document.getElementById('data').value = content;
+                }
             } catch (e) {
-                console.error('RenderNav Error:', e);
+                console.log('加载数据失败：', e.message);
             }
         }
 
-        function renderCategories() {
-            try {
-                const container = document.getElementById('categories');
-                if (!container) throw new Error('Categories container not found');
-                container.innerHTML = '';
-                categories.forEach((cat, catIndex) => {
-                    const catDiv = document.createElement('div');
-                    catDiv.className = 'category';
-                    catDiv.id = cat.id;
-                    catDiv.innerHTML = `
-                        <h2>${cat.isEditing ? `<input value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称">` : cat.name}</h2>
-                        <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditCategory('${cat.id}')">${cat.isEditing ? '保存' : '修改'}</button>
-                        <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${cat.isEditing ? '' : 'disabled'}" onclick="deleteCategory('${cat.id}')">删除</button>
-                        <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'up')" ${catIndex === 0 ? 'disabled' : ''}>上移</button>
-                        <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'down')" ${catIndex === categories.length - 1 ? 'disabled' : ''}>下移</button>
-                        <div class="urls" id="urls-${cat.id}"></div>
-                        <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addUrl('${cat.id}')">添加网址</button>
-                        <div id="subcats-${cat.id}"></div>
-                        <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubcategory('${cat.id}')">添加子分类</button>
-                    `;
-                    container.appendChild(catDiv);
-
-                    const urlsDiv = catDiv.querySelector(`#urls-${cat.id}`);
-                    cat.urls.forEach((url, urlIndex) => {
-                        const urlDiv = document.createElement('div');
-                        urlDiv.className = 'url';
-                        urlDiv.innerHTML = `
-                            ${url.isEditing ? `
-                                <div class="url-main">
-                                    <div>
-                                        <input value="${url.name}" id="url-name-${url.id}" placeholder="名称">
-                                        <input value="${url.url}" id="url-url-${url.id}" placeholder="网址">
-                                        <textarea id="url-desc-${url.id}" placeholder="描述">${url.desc}</textarea>
-                                    </div>
-                                </div>
-                            ` : `
-                                <div class="url-main">
-                                    <a href="${url.url}" target="_blank" class="url-icon-link">
-                                        <img src="${url.icon}" alt="favicon" onerror="this.src='https://example.com/favicon.ico'">
-                                    </a>
-                                    <div class="url-content">
-                                        <div class="url-name">${url.name}</div>
-                                        <div class="url-desc">${url.desc}</div>
-                                    </div>
-                                </div>
-                            `}
-                            <div class="url-actions ${isEditMode ? '' : 'hidden'}">
-                                <button class="edit-btn" onclick="toggleEditUrl('${url.id}')">${url.isEditing ? '保存' : '修改'}</button>
-                                <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
-                                <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
-                                <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === cat.urls.length - 1 ? 'disabled' : ''}>下移</button>
-                            </div>
-                        `;
-                        urlsDiv.appendChild(urlDiv);
-                    });
-
-                    const subcatsDiv = catDiv.querySelector(`#subcats-${cat.id}`);
-                    cat.subcategories.forEach((subcat, subcatIndex) => {
-                        const subcatDiv = document.createElement('div');
-                        subcatDiv.className = 'subcategory';
-                        subcatDiv.id = subcat.id;
-                        subcatDiv.innerHTML = `
-                            <h4>${subcat.isEditing ? `<input value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称">` : subcat.name}</h4>
-                            <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
-                            <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
-                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
-                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${subcatIndex === cat.subcategories.length - 1 ? 'disabled' : ''}>下移</button>
-                            <div class="urls" id="suburls-${subcat.id}"></div>
-                            <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubUrl('${subcat.id}')">添加网址</button>
-                        `;
-                        subcatsDiv.appendChild(subcatDiv);
-
-                        const subUrlsDiv = subcatDiv.querySelector(`#suburls-${subcat.id}`);
-                        subcat.urls.forEach((url, urlIndex) => {
-                            const urlDiv = document.createElement('div');
-                            urlDiv.className = 'url';
-                            urlDiv.innerHTML = `
-                                ${url.isEditing ? `
-                                    <div class="url-main">
-                                        <div>
-                                            <input value="${url.name}" id="url-name-${url.id}" placeholder="名称">
-                                            <input value="${url.url}" id="url-url-${url.id}" placeholder="网址">
-                                            <textarea id="url-desc-${url.id}" placeholder="描述">${url.desc}</textarea>
-                                        </div>
-                                    </div>
-                                ` : `
-                                    <div class="url-main">
-                                        <a href="${url.url}" target="_blank" class="url-icon-link">
-                                            <img src="${url.icon}" alt="favicon" onerror="this.src='https://example.com/favicon.ico'">
-                                        </a>
-                                        <div class="url-content">
-                                            <div class="url-name">${url.name}</div>
-                                            <div class="url-desc">${url.desc}</div>
-                                        </div>
-                                    </div>
-                                `}
-                                <div class="url-actions ${isEditMode ? '' : 'hidden'}">
-                                    <button class="edit-btn" onclick="toggleEditUrl('${url.id}')">${url.isEditing ? '保存' : '修改'}</button>
-                                    <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
-                                    <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
-                                    <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === subcat.urls.length - 1 ? 'disabled' : ''}>下移</button>
-                                </div>
-                            `;
-                            subUrlsDiv.appendChild(urlDiv);
-                        });
-                    });
-
-                    if (cat.isEditing) {
-                        catDiv.querySelector(`#cat-name-${cat.id}`).oninput = e => {
-                            cat.name = e.target.value;
-                            isDataSaved = false;
-                        };
-                    }
-                });
-
-                const globalAddBtn = document.querySelector('.content > .add-btn');
-                if (globalAddBtn) {
-                    globalAddBtn.className = `add-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-                const saveBtn = document.querySelector('.save-btn');
-                if (saveBtn) {
-                    saveBtn.className = `save-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-                const restoreBtn = document.querySelector('.restore-btn');
-                if (restoreBtn) {
-                    restoreBtn.className = `restore-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-                const onlineRestoreBtn = document.querySelector('.online-restore-btn');
-                if (onlineRestoreBtn) {
-                    onlineRestoreBtn.className = `online-restore-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-                const onlineSaveBtn = document.querySelector('.online-save-btn');
-                if (onlineSaveBtn) {
-                    onlineSaveBtn.className = `online-save-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-                const autoUpdateBtn = document.querySelector('.auto-update-btn');
-                if (autoUpdateBtn) {
-                    autoUpdateBtn.className = `auto-update-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-                const authBtn = document.querySelector('.auth-btn');
-                if (authBtn) {
-                    authBtn.className = `auth-btn ${isEditMode ? '' : 'hidden'}`;
-                }
-
-                renderNav();
-            } catch (e) {
-                console.error('RenderCategories Error:', e);
-            }
-        }
-
-        function toggleMode() {
-            try {
-                if (isEditMode) {
-                    let hasEditing = false;
-                    for (const cat of categories) {
-                        if (cat.isEditing) {
-                            hasEditing = true;
-                            break;
-                        }
-                        if (cat.urls.some(url => url.isEditing)) {
-                            hasEditing = true;
-                            break;
-                        }
-                        if (cat.subcategories.some(subcat => subcat.isEditing || subcat.urls.some(url => url.isEditing))) {
-                            hasEditing = true;
-                            break;
-                        }
-                    }
-                    if (hasEditing) {
-                        alert('退出失败，请先完成编辑！');
-                        return;
-                    }
-                    if (!isDataSaved) {
-                        alert('数据未保存，请点击“保存备份”后再退出！');
-                        return;
-                    }
-                    isEditMode = false;
-                } else {
-                    isEditMode = true;
-                }
-                const toggleBtn = document.getElementById('toggle-mode');
-                if (toggleBtn) {
-                    toggleBtn.textContent = isEditMode ? '退出' : '进入';
-                }
-                renderCategories();
-            } catch (e) {
-                console.error('ToggleMode Error:', e);
-            }
-        }
-
-        function generateId(prefix) {
-            return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-        }
-
-        function addCategory() {
-            try {
-                categories.push({
-                    id: generateId('cat'),
-                    name: '新分类',
-                    isEditing: false,
-                    urls: [],
-                    subcategories: []
-                });
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('AddCategory Error:', e);
-                alert('添加分类失败，请检查控制台！');
-            }
-        }
-
-        function toggleEditCategory(id) {
-            try {
-                const cat = categories.find(c => c.id === id);
-                if (!cat) return;
-                if (cat.isEditing) {
-                    const nameInput = document.getElementById(`cat-name-${id}`);
-                    if (nameInput) cat.name = nameInput.value;
-                }
-                cat.isEditing = !cat.isEditing;
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('ToggleEditCategory Error:', e);
-            }
-        }
-
-        function deleteCategory(id) {
-            try {
-                const cat = categories.find(c => c.id === id);
-                if (!cat || !cat.isEditing) return;
-                categories = categories.filter(c => c.id !== id);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('DeleteCategory Error:', e);
-            }
-        }
-
-        function addUrl(catId) {
-            try {
-                const cat = categories.find(c => c.id === catId);
-                if (!cat) return;
-                const newUrl = {
-                    id: generateId('url'),
-                    name: '新网站',
-                    url: 'https://example.com',
-                    desc: '网站描述',
-                    icon: getFaviconUrl('https://example.com'),
-                    isEditing: true
-                };
-                cat.urls.push(newUrl);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('AddUrl Error:', e);
-            }
-        }
-
-        function toggleEditUrl(id) {
-            try {
-                let url;
-                for (const cat of categories) {
-                    url = cat.urls.find(u => u.id === id);
-                    if (url) break;
-                    for (const subcat of cat.subcategories) {
-                        url = subcat.urls.find(u => u.id === id);
-                        if (url) break;
-                    }
-                    if (url) break;
-                }
-                if (!url) return;
-                if (url.isEditing) {
-                    const nameInput = document.getElementById(`url-name-${id}`);
-                    const urlInput = document.getElementById(`url-url-${id}`);
-                    const descInput = document.getElementById(`url-desc-${id}`);
-                    if (nameInput && urlInput && descInput) {
-                        url.name = nameInput.value;
-                        url.url = urlInput.value;
-                        url.desc = descInput.value;
-                        url.icon = getFaviconUrl(urlInput.value);
-                    }
-                }
-                url.isEditing = !url.isEditing;
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('ToggleEditUrl Error:', e);
-            }
-        }
-
-        function deleteUrl(id) {
-            try {
-                for (const cat of categories) {
-                    const urlIndex = cat.urls.findIndex(u => u.id === id);
-                    if (urlIndex !== -1 && cat.urls[urlIndex].isEditing) {
-                        cat.urls.splice(urlIndex, 1);
-                        isDataSaved = false;
-                        saveCategories();
-                        renderCategories();
-                        return;
-                    }
-                    for (const subcat of cat.subcategories) {
-                        const subUrlIndex = subcat.urls.findIndex(u => u.id === id);
-                        if (subUrlIndex !== -1 && subcat.urls[subUrlIndex].isEditing) {
-                            subcat.urls.splice(subUrlIndex, 1);
-                            isDataSaved = false;
-                            saveCategories();
-                            renderCategories();
-                            return;
-                        }
-                    }
-                }
-            } catch (e) {
-                console.error('DeleteUrl Error:', e);
-            }
-        }
-
-        function addSubcategory(catId) {
-            try {
-                const cat = categories.find(c => c.id === catId);
-                if (!cat) return;
-                cat.subcategories.push({
-                    id: generateId('subcat'),
-                    name: '新子分类',
-                    isEditing: false,
-                    urls: []
-                });
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('AddSubcategory Error:', e);
-            }
-        }
-
-        function toggleEditSubcategory(id) {
-            try {
-                let subcat;
-                for (const cat of categories) {
-                    subcat = cat.subcategories.find(s => s.id === id);
-                    if (subcat) break;
-                }
-                if (!subcat) return;
-                if (subcat.isEditing) {
-                    const nameInput = document.getElementById(`subcat-name-${id}`);
-                    if (nameInput) subcat.name = nameInput.value;
-                }
-                subcat.isEditing = !subcat.isEditing;
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('ToggleEditSubcategory Error:', e);
-            }
-        }
-
-        function deleteSubcategory(id) {
-            try {
-                for (const cat of categories) {
-                    const subcatIndex = cat.subcategories.findIndex(s => s.id === id);
-                    if (subcatIndex !== -1 && cat.subcategories[subcatIndex].isEditing) {
-                        cat.subcategories.splice(subcatIndex, 1);
-                        isDataSaved = false;
-                        saveCategories();
-                        renderCategories();
-                        return;
-                    }
-                }
-            } catch (e) {
-                console.error('DeleteSubcategory Error:', e);
-            }
-        }
-
-        function addSubUrl(subcatId) {
-            try {
-                let subcat;
-                for (const cat of categories) {
-                    subcat = cat.subcategories.find(s => s.id === subcatId);
-                    if (subcat) break;
-                }
-                if (!subcat) return;
-                const newUrl = {
-                    id: generateId('url'),
-                    name: '新网站',
-                    url: 'https://example.com',
-                    desc: '网站描述',
-                    icon: getFaviconUrl('https://example.com'),
-                    isEditing: true
-                };
-                subcat.urls.push(newUrl);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('AddSubUrl Error:', e);
-            }
-        }
-
-        // 初始化时检查令牌
-        accessToken = localStorage.getItem('access_token');
-        updateButtonStates();
-
-        try {
-            console.log('Script loaded');
-            renderCategories();
-        } catch (e) {
-            console.error('Initial render failed:', e);
+        // 页面加载时尝试加载数据
+        if (accessToken) {
+            loadData();
         }
     </script>
 </body>
