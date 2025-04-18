@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Callback</title>
+</head>
+<body>
+    <p>Processing login...</p>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const state = params.get('state'); // 初始地址
+        if (code && state) {
+            fetch('https://proud-glitter-1013.u788990.workers.dev', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.access_token) {
+                        window.opener.postMessage(
+                            { access_token: data.access_token },
+                            decodeURIComponent(state)
+                        );
+                        window.close();
+                    } else {
+                        alert('Failed to get access token');
+                    }
+                })
+                .catch(err => alert('Error: ' + err.message));
+        } else {
+            alert('No authorization code or state found');
+        }
+    </script>
+</body>
+</html>
