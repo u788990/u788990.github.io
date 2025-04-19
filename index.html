@@ -78,6 +78,8 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             margin-top: 0.5rem;
+            max-height: 80vh; /* 最大高度限制 */
+            overflow-y: auto; /* 内容过长时滚动 */
         }
 
         .sidebar.expanded ul {
@@ -192,7 +194,7 @@
         .urls {
             margin: 0.3125rem 0 0.3125rem 1.25rem;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 调整为150px以显示8个网址 */
             gap: 0.625rem;
         }
 
@@ -433,7 +435,7 @@
             }
 
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 电脑端也显示更多网址 */
             }
         }
 
@@ -454,7 +456,7 @@
             }
 
             .urls {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 手机端也调整为150px */
                 gap: 0.5rem;
             }
 
@@ -468,7 +470,7 @@
 
         @media (max-width: 480px) {
             .urls {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
 
             button {
@@ -1210,11 +1212,13 @@
                             } else if (type === 'subcategory') {
                                 const targetCat = categories.find(c => c.id === parentId);
                                 const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
+                                // 迁移顶级网址
                                 targetSubcat.urls.push(...cat.urls);
+                                // 迁移子分类中的所有网址
                                 cat.subcategories.forEach(subcat => {
-                                    subcat.urls.forEach(url => targetSubcat.urls.push(url));
+                                    targetSubcat.urls.push(...subcat.urls);
                                 });
-                                alert(`分类 "${cat.name}" 的所有网址已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"，子分类已丢弃并删除！`);
+                                alert(`分类 "${cat.name}" 的所有网址已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"，其子分类结构已丢弃！`);
                             }
                             categories = categories.filter(c => c.id !== id);
                             isDataSaved = false;
