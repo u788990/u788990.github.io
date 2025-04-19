@@ -261,7 +261,7 @@
             text-overflow: ellipsis;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 0.3125rem;
             margin: 0.3125rem 0;
@@ -331,6 +331,64 @@
 
         .hidden {
             display: none;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .modal-actions button {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .modal-confirm {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-confirm:hover {
+            background: #218838;
+        }
+
+        .modal-cancel {
+            background: #dc3545;
+            color: white;
+        }
+
+        .modal-cancel:hover {
+            background: #c82333;
         }
 
         /* 响应式设计 */
@@ -697,6 +755,44 @@
             }
         }
 
+        function showModal(message, options, onConfirm, onCancel) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <p>${message}</p>
+                    <select id="modal-select">
+                        <option value="">请选择目标分类</option>
+                        ${options.map(opt => `<option value="${opt.id}">${opt.name}</option>`).join('')}
+                    </select>
+                    <div class="modal-actions">
+                        <button class="modal-confirm">确认</button>
+                        <button class="modal-cancel">取消</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            const confirmBtn = modal.querySelector('.modal-confirm');
+            const cancelBtn = modal.querySelector('.modal-cancel');
+            const select = modal.querySelector('#modal-select');
+
+            confirmBtn.addEventListener('click', () => {
+                const selectedValue = select.value;
+                if (!selectedValue) {
+                    alert('请选择一个目标分类！');
+                    return;
+                }
+                onConfirm(selectedValue);
+                document.body.removeChild(modal);
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                if (onCancel) onCancel();
+                document.body.removeChild(modal);
+            });
+        }
+
         function migrateUrl(urlId) {
             try {
                 let url, sourceCat, sourceSubcat;
@@ -731,27 +827,24 @@
                     return;
                 }
 
-                const catNames = otherCats.map(c => c.name).join(', ');
-                const targetCatName = prompt(`请输入目标分类名称（可选分类：${catNames}）：`, otherCats[0].name);
-                if (!targetCatName) return;
-
-                const targetCat = categories.find(c => c.name === targetCatName);
-                if (!targetCat) {
-                    alert('目标分类不存在！');
-                    return;
-                }
-
-                if (sourceSubcat) {
-                    sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
-                } else {
-                    sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
-                }
-
-                targetCat.urls.push(url);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-                alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
+                showModal(
+                    `将网址 "${url.name}" 迁移到以下分类：`,
+                    otherCats,
+                    (targetCatId) => {
+                        const targetCat = categories.find(c => c.id === targetCatId);
+                        if (sourceSubcat) {
+                            sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
+                        } else {
+                            sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                        }
+                        targetCat.urls.push(url);
+                        isDataSaved = false;
+                        saveCategories();
+                        renderCategories();
+                        alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
+                    },
+                    () => {} // 取消时不执行任何操作
+                );
             } catch (e) {
                 console.error('MigrateUrl Error:', e);
                 alert('迁移失败，请检查控制台！');
@@ -1062,38 +1155,40 @@
                 const hasSubcategories = cat.subcategories.length > 0;
                 const subcatUrls = cat.subcategories.reduce((total, subcat) => total + subcat.urls.length, 0);
 
-                let targetCat = null;
                 if (hasUrls || hasSubcategories || subcatUrls > 0) {
                     const otherCats = categories.filter(c => c.id !== id);
-                    if (otherCats.length > 0) {
-                        const catNames = otherCats.map(c => c.name).join(', ');
-                        const confirmMsg = `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，是否迁移到其他分类？（可选分类：${catNames}）`;
-                        if (confirm(confirmMsg)) {
-                            const targetCatName = prompt(`请输入目标分类名称（可选分类：${catNames}）：`, otherCats[0].name);
-                            if (targetCatName) {
-                                targetCat = categories.find(c => c.name === targetCatName);
-                                if (!targetCat) {
-                                    alert('目标分类不存在，将直接删除！');
-                                }
-                            }
+                    if (otherCats.length === 0) {
+                        alert('没有其他分类可供迁移，无法删除！请先创建新分类或清空内容。');
+                        return;
+                    }
+
+                    showModal(
+                        `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，请选择迁移目标：`,
+                        otherCats,
+                        (targetCatId) => {
+                            const targetCat = categories.find(c => c.id === targetCatId);
+                            targetCat.urls.push(...cat.urls);
+                            targetCat.subcategories.push(...cat.subcategories);
+                            categories = categories.filter(c => c.id !== id);
+                            isDataSaved = false;
+                            saveCategories();
+                            renderCategories();
+                            renderNav();
+                            alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}" 并删除！`);
+                        },
+                        () => {
+                            alert('必须迁移内容后才能删除分类！');
                         }
-                    } else {
-                        const confirmMsg = `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，没有其他分类可供迁移，确认删除？`;
-                        if (!confirm(confirmMsg)) return;
+                    );
+                } else {
+                    if (confirm(`确定要删除分类 "${cat.name}" 吗？`)) {
+                        categories = categories.filter(c => c.id !== id);
+                        isDataSaved = false;
+                        saveCategories();
+                        renderCategories();
+                        renderNav();
                     }
                 }
-
-                if (targetCat) {
-                    targetCat.urls.push(...cat.urls);
-                    targetCat.subcategories.push(...cat.subcategories);
-                    alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}"！`);
-                }
-
-                categories = categories.filter(c => c.id !== id);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-                renderNav();
             } catch (e) {
                 console.error('DeleteCategory Error:', e);
                 alert('删除失败，请检查控制台！');
