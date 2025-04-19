@@ -38,20 +38,17 @@
         .sidebar {
             width: 100%;
             max-width: 250px;
-            background: transparent; /* 背景透明 */
-            border: none; /* 移除边框 */
-            position: fixed; /* 浮层显示 */
+            background: transparent;
+            border: none;
+            position: fixed;
             top: 0;
             left: 0;
-            z-index: 1000; /* 确保在最上层 */
+            z-index: 1000;
         }
 
         .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 0.625rem;
-            background: rgba(255, 255, 255, 0.8); /* 头部背景略透明 */
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
         }
 
@@ -59,34 +56,40 @@
             margin: 0;
             color: #333;
             font-size: 1.125rem;
+            font-weight: bold; /* 标题加粗 */
         }
 
         .toggle-sidebar {
+            display: block;
+            width: 100%;
             background: none;
             border: none;
-            font-size: 1rem;
+            font-size: 1.5rem; /* 调整三角符号大小 */
             cursor: pointer;
             color: #007bff;
+            text-align: center;
+            padding: 0.5rem 0;
         }
 
         .sidebar ul {
             list-style: none;
             padding: 0.625rem;
-            display: none; /* 默认隐藏 */
-            background: rgba(255, 255, 255, 0.8); /* 导航背景略透明 */
+            display: none;
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             margin-top: 0.5rem;
         }
 
         .sidebar.expanded ul {
-            display: block; /* 展开时显示 */
+            display: block;
         }
 
         .sidebar li {
             padding: 0.5rem 0.625rem;
             cursor: pointer;
             transition: background 0.2s;
-            color: #333; /* 确保文字可见 */
+            color: #333;
+            font-weight: bold; /* 导航项字体加粗 */
         }
 
         .sidebar li:hover {
@@ -101,7 +104,7 @@
         .content {
             flex: 1;
             max-width: 100%;
-            margin-top: 3rem; /* 避免被固定定位的导航遮挡 */
+            margin-top: 3rem;
         }
 
         .content h1 {
@@ -334,30 +337,30 @@
             }
 
             .sidebar {
-                position: sticky; /* 桌面端恢复 sticky 定位 */
+                position: sticky;
                 top: 1rem;
-                background: #fff; /* 桌面端恢复白色背景 */
+                background: #fff;
                 border: 1px solid #ddd;
                 width: 200px;
                 margin-right: 0.5rem;
             }
 
             .sidebar-header {
-                background: transparent; /* 桌面端头部不需要透明背景 */
+                background: transparent;
             }
 
             .sidebar ul {
-                display: block; /* 桌面端默认展开 */
-                background: transparent; /* 桌面端不需要透明背景 */
+                display: block;
+                background: transparent;
             }
 
             .toggle-sidebar {
-                display: none; /* 桌面端隐藏展开/收缩按钮 */
+                display: none;
             }
 
             .content {
                 max-width: 1000px;
-                margin-top: 0; /* 桌面端无需额外顶部间距 */
+                margin-top: 0;
             }
 
             .urls {
@@ -367,13 +370,13 @@
 
         @media (max-width: 767px) {
             .sidebar {
-                max-width: 100%;
+                max-width: 25%; /* 手机端宽度为屏幕的25% */
                 margin-right: 0;
                 padding: 0.5rem;
             }
 
             .sidebar.expanded ul {
-                display: block; /* 确保手机端展开时显示 */
+                display: block;
             }
 
             .urls {
@@ -414,9 +417,11 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>分类导航</h3>
-            <button class="toggle-sidebar" onclick="toggleSidebar()">收缩</button>
         </div>
-        <ul id="nav"></ul>
+        <ul id="nav">
+            <!-- 导航内容将动态填充 -->
+        </ul>
+        <button class="toggle-sidebar" onclick="toggleSidebar()">▼</button>
     </div>
 
     <div class="content">
@@ -471,7 +476,7 @@
         let isEditMode = false;
         let isDataSaved = true;
         let backupFiles = [];
-        let isSidebarExpanded = true; // 默认展开
+        let isSidebarExpanded = true;
 
         function loadCategories() {
             try {
@@ -892,7 +897,7 @@
             const toggleBtn = document.querySelector('.toggle-sidebar');
             isSidebarExpanded = !isSidebarExpanded;
             sidebar.classList.toggle('expanded', isSidebarExpanded);
-            toggleBtn.textContent = isSidebarExpanded ? '收缩' : '展开';
+            toggleBtn.textContent = isSidebarExpanded ? '▼' : '▲';
             renderNav();
         }
 
@@ -1132,7 +1137,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('sidebar');
             if (window.innerWidth <= 767) {
-                sidebar.classList.add('expanded'); // 手机端默认展开
+                sidebar.classList.add('expanded');
             }
         });
 
