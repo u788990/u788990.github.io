@@ -11,7 +11,6 @@
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRkZGRkZGIi8+Cjx0ZXh0IHg9IjgiIHk9IjQ4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjRkYwMDAwIj5CPC90ZXh0Pgo8dGV4dCB4PSIzMiIgeT0iNDgiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwMDhFMzgiPks8L3RleHQ+Cjwvc3ZnPg==" type="image/svg+xml">
     
     <style>
-        /* 基础样式重置，确保跨浏览器一致性 */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -27,7 +26,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
-            padding: 1rem;
+            padding: 0.5rem;
             display: flex;
             flex-direction: column;
             background: #f5f5f5;
@@ -41,24 +40,41 @@
             max-width: 250px;
             background: #fff;
             border: 1px solid #ddd;
-            padding: 0.625rem;
             border-radius: 8px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             position: sticky;
-            top: 1rem;
+            top: 0.5rem;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.625rem;
         }
 
         .sidebar h3 {
-            margin: 0 0 0.625rem;
+            margin: 0;
             color: #333;
             font-size: 1.125rem;
         }
 
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #007bff;
+        }
+
         .sidebar ul {
             list-style: none;
+            padding: 0.625rem;
+            display: none; /* 默认隐藏 */
+        }
+
+        .sidebar.expanded ul {
+            display: block; /* 展开时显示 */
         }
 
         .sidebar li {
@@ -308,13 +324,21 @@
         @media (min-width: 768px) {
             body {
                 flex-direction: row;
-                padding: 1.25rem;
+                padding: 1rem;
             }
 
             .sidebar {
                 width: 200px;
-                margin-right: 1.25rem;
+                margin-right: 0.5rem;
                 margin-bottom: 0;
+            }
+
+            .sidebar ul {
+                display: block; /* 桌面端默认展开 */
+            }
+
+            .toggle-sidebar {
+                display: none; /* 桌面端隐藏展开/收缩按钮 */
             }
 
             .content {
@@ -327,8 +351,14 @@
         }
 
         @media (max-width: 767px) {
+            .sidebar {
+                max-width: 100%; /* 减少右侧留白 */
+                margin-right: 0;
+            }
+
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                grid-template-columns: repeat(2, 1fr); /* 一行显示两个网址 */
+                gap: 0.5rem;
             }
 
             #credit-text {
@@ -341,7 +371,7 @@
 
         @media (max-width: 480px) {
             .urls {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr); /* 小屏幕仍保持一行两个 */
             }
 
             button {
@@ -361,8 +391,11 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h3>分类导航</h3>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>分类导航</h3>
+            <button class="toggle-sidebar" onclick="toggleSidebar()">展开</button>
+        </div>
         <ul id="nav"></ul>
     </div>
 
@@ -418,6 +451,7 @@
         let isEditMode = false;
         let isDataSaved = true;
         let backupFiles = [];
+        let isSidebarExpanded = false;
 
         function loadCategories() {
             try {
@@ -721,7 +755,7 @@
                             <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
                             <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
                             <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
-                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${subcatIndex === cat.subcategories.length - 1 ? 'disabled' : ''}>下移</button>
+                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${sub  : ''}>下移</button>
                             <div class="urls" id="suburls-${subcat.id}"></div>
                             <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubUrl('${subcat.id}')">添加网址</button>
                         `;
@@ -825,6 +859,14 @@
             } catch (e) {
                 console.error('ToggleMode Error:', e);
             }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            isSidebarExpanded = !isSidebarExpanded;
+            sidebar.classList.toggle('expanded', isSidebarExpanded);
+            toggleBtn.textContent = isSidebarExpanded ? '收缩' : '展开';
         }
 
         function generateId(prefix) {
@@ -1041,7 +1083,6 @@
             }
         }
 
-        // 防抖函数，优化滚动事件
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -1050,7 +1091,6 @@
             };
         }
 
-        // 监听窗口调整，优化布局
         window.addEventListener('resize', debounce(() => {
             renderCategories();
         }, 200));
