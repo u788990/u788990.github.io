@@ -47,16 +47,14 @@
         }
 
         .sidebar-header {
-            padding: 0.3125rem; /* 原 0.625rem，减少50% */
-            background: rgba(255, 255, 255, 0.3); /* 半透明背景 */
-            backdrop-filter: blur(5px); /* 模糊效果，模拟玻璃 */
-            -webkit-backdrop-filter: blur(5px); /* 兼容 Safari */
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1); /* 完全透明背景 */
             border-radius: 8px;
         }
 
         .sidebar h3 {
             margin: 0;
-            color: #007bff; /* 蓝色文字 */
+            color: #007bff;
             font-size: 1.125rem;
             font-weight: bold;
         }
@@ -68,20 +66,18 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #007bff; /* 蓝色三角符号 */
+            color: #007bff;
             text-align: center;
-            padding: 0.25rem 0; /* 原 0.5rem，减少50% */
+            padding: 0.5rem 0;
         }
 
         .sidebar ul {
             list-style: none;
-            padding: 0.3125rem; /* 原 0.625rem，减少50% */
+            padding: 0.5rem;
             display: none;
-            background: rgba(255, 255, 255, 0.3); /* 半透明背景 */
-            backdrop-filter: blur(5px); /* 模糊效果 */
-            -webkit-backdrop-filter: blur(5px); /* 兼容 Safari */
+            background: rgba(255, 255, 255, 0.1); /* 完全透明背景 */
             border-radius: 8px;
-            margin-top: 0.25rem; /* 原 0.5rem，减少50% */
+            margin-top: 0.5rem;
         }
 
         .sidebar.expanded ul {
@@ -89,15 +85,13 @@
         }
 
         .sidebar li {
-            padding: 0.25rem 0.3125rem; /* 原 0.5rem 0.625rem，减少50% */
+            padding: 0.5rem 0.625rem;
             cursor: pointer;
             transition: background 0.2s;
-            color: #007bff; /* 蓝色文字 */
+            color: #007bff;
             font-weight: bold;
-            font-size: 0.875rem; /* 调整字体大小以适应一行五个字 */
-            white-space: nowrap; /* 防止换行 */
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 0.875rem;
+            /* 移除 text-overflow 和 nowrap，确保文字完整显示 */
         }
 
         .sidebar li:hover {
@@ -105,7 +99,7 @@
         }
 
         .sidebar ul ul {
-            margin-left: 0.46875rem; /* 原 0.9375rem，减少50% */
+            margin-left: 0.9375rem;
         }
 
         /* 内容区域样式 */
@@ -355,23 +349,11 @@
 
             .sidebar-header {
                 background: transparent;
-                padding: 0.625rem; /* 桌面端恢复原始留白 */
             }
 
             .sidebar ul {
                 display: block;
                 background: transparent;
-                padding: 0.625rem; /* 桌面端恢复原始留白 */
-                margin-top: 0.5rem; /* 桌面端恢复原始留白 */
-            }
-
-            .sidebar li {
-                padding: 0.5rem 0.625rem; /* 桌面端恢复原始留白 */
-                font-size: 1rem; /* 桌面端字体稍大 */
-            }
-
-            .sidebar ul ul {
-                margin-left: 0.9375rem; /* 桌面端恢复原始留白 */
             }
 
             .toggle-sidebar {
@@ -392,7 +374,7 @@
             .sidebar {
                 max-width: 25%;
                 margin-right: 0;
-                padding: 0.25rem; /* 原 0.5rem，减少50% */
+                padding: 0.5rem;
             }
 
             .sidebar.expanded ul {
@@ -708,15 +690,23 @@
         function renderNav() {
             try {
                 const nav = document.getElementById('nav');
-                if (!nav) throw new Error('Nav element not found');
+                if (!nav) {
+                    console.error('Nav element not found');
+                    return;
+                }
                 nav.innerHTML = '';
                 categories.forEach(cat => {
                     const li = document.createElement('li');
                     li.textContent = cat.name;
-                    li.onclick = () => {
+                    li.dataset.catId = cat.id; // 添加 data 属性以便调试
+                    li.addEventListener('click', () => {
                         const target = document.getElementById(cat.id);
-                        if (target) target.scrollIntoView({ behavior: 'smooth' });
-                    };
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            console.warn(`Category element with ID ${cat.id} not found`);
+                        }
+                    });
                     nav.appendChild(li);
 
                     if (cat.subcategories.length) {
@@ -724,10 +714,15 @@
                         cat.subcategories.forEach(subcat => {
                             const subLi = document.createElement('li');
                             subLi.textContent = subcat.name;
-                            subLi.onclick = () => {
+                            subLi.dataset.subcatId = subcat.id; // 添加 data 属性以便调试
+                            subLi.addEventListener('click', () => {
                                 const target = document.getElementById(subcat.id);
-                                if (target) target.scrollIntoView({ behavior: 'smooth' });
-                            };
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                } else {
+                                    console.warn(`Subcategory element with ID ${subcat.id} not found`);
+                                }
+                            });
                             subUl.appendChild(subLi);
                         });
                         nav.appendChild(subUl);
@@ -741,7 +736,10 @@
         function renderCategories() {
             try {
                 const container = document.getElementById('categories');
-                if (!container) throw new Error('Categories container not found');
+                if (!container) {
+                    console.error('Categories container not found');
+                    return;
+                }
                 container.innerHTML = '';
                 categories.forEach((cat, catIndex) => {
                     const catDiv = document.createElement('div');
@@ -761,6 +759,10 @@
                     container.appendChild(catDiv);
 
                     const urlsDiv = catDiv.querySelector(`#urls-${cat.id}`);
+                    if (!urlsDiv) {
+                        console.warn(`Urls container for category ${cat.id} not found`);
+                        return;
+                    }
                     cat.urls.forEach((url, urlIndex) => {
                         const urlDiv = document.createElement('div');
                         urlDiv.className = 'url';
@@ -795,6 +797,10 @@
                     });
 
                     const subcatsDiv = catDiv.querySelector(`#subcats-${cat.id}`);
+                    if (!subcatsDiv) {
+                        console.warn(`Subcategories container for category ${cat.id} not found`);
+                        return;
+                    }
                     cat.subcategories.forEach((subcat, subcatIndex) => {
                         const subcatDiv = document.createElement('div');
                         subcatDiv.className = 'subcategory';
@@ -811,6 +817,10 @@
                         subcatsDiv.appendChild(subcatDiv);
 
                         const subUrlsDiv = subcatDiv.querySelector(`#suburls-${subcat.id}`);
+                        if (!subUrlsDiv) {
+                            console.warn(`Suburls container for subcategory ${subcat.id} not found`);
+                            return;
+                        }
                         subcat.urls.forEach((url, urlIndex) => {
                             const urlDiv = document.createElement('div');
                             urlDiv.className = 'url';
@@ -898,7 +908,7 @@
                     if (!isDataSaved) {
                         alert('数据未保存，请点击“保存备份”后再退出！');
                         return;
- ABOVE:  }
+                    }
                     isEditMode = false;
                 } else {
                     isEditMode = true;
@@ -913,12 +923,20 @@
         }
 
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-sidebar');
-            isSidebarExpanded = !isSidebarExpanded;
-            sidebar.classList.toggle('expanded', isSidebarExpanded);
-            toggleBtn.textContent = isSidebarExpanded ? '▼' : '▲';
-            renderNav();
+            try {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.querySelector('.toggle-sidebar');
+                if (!sidebar || !toggleBtn) {
+                    console.error('Sidebar or toggle button not found');
+                    return;
+                }
+                isSidebarExpanded = !isSidebarExpanded;
+                sidebar.classList.toggle('expanded', isSidebarExpanded);
+                toggleBtn.textContent = isSidebarExpanded ? '▼' : '▲';
+                renderNav();
+            } catch (e) {
+                console.error('ToggleSidebar Error:', e);
+            }
         }
 
         function generateId(prefix) {
@@ -1155,9 +1173,19 @@
 
         // 初始渲染时确保展开状态
         document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 767) {
-                sidebar.classList.add('expanded');
+            try {
+                const sidebar = document.getElementById('sidebar');
+                if (!sidebar) {
+                    console.error('Sidebar element not found on DOM load');
+                    return;
+                }
+                if (window.innerWidth <= 767) {
+                    sidebar.classList.add('expanded');
+                }
+                renderCategories();
+                renderNav();
+            } catch (e) {
+                console.error('DOMContentLoaded Error:', e);
             }
         });
 
