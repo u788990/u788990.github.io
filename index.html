@@ -54,7 +54,7 @@
 
         .sidebar h3 {
             margin: 0;
-            color: #ff1493; /* 改为粉红色 */
+            color: #ff69b4; /* 粉红色 */
             font-size: 1.125rem;
             font-weight: bold;
         }
@@ -66,7 +66,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #ff1493; /* 改为粉红色 */
+            color: #ff69b4; /* 粉红色 */
             text-align: center;
             padding: 0.5rem 0;
         }
@@ -88,7 +88,7 @@
             padding: 0.5rem 0.625rem;
             cursor: pointer;
             transition: background 0.2s;
-            color: #ff1493; /* 改为粉红色 */
+            color: #ff69b4; /* 粉红色 */
             font-weight: bold;
             font-size: 0.875rem;
         }
@@ -98,10 +98,10 @@
         }
 
         .sidebar ul ul {
-            margin-left: 0.1875rem; /* 原 0.9375rem，减少80% */
-            margin-top: 0.1rem; /* 原 0.5rem，减少80% */
-            margin-bottom: 0.1rem; /* 原 0.5rem，减少80% */
-            padding: 0.1rem; /* 原 0.5rem，减少80% */
+            margin-left: 0.1875rem;
+            margin-top: 0.1rem;
+            margin-bottom: 0.1rem;
+            padding: 0.1rem;
         }
 
         /* 内容区域样式 */
@@ -313,18 +313,18 @@
             cursor: not-allowed;
         }
 
-        .move-btn {
+        .move-btn, .migrate-btn {
             background: #6c757d;
             color: white;
             padding: 0.5rem;
             font-size: 0.75rem;
         }
 
-        .move-btn:hover {
+        .move-btn:hover, .migrate-btn:hover {
             background: #5a6268;
         }
 
-        .move-btn:disabled {
+        .move-btn:disabled, .migrate-btn:disabled {
             background: #adb5bd;
             cursor: not-allowed;
         }
@@ -358,6 +358,14 @@
                 background: transparent;
             }
 
+            .sidebar h3 {
+                font-size: 1.35rem; /* 原 1.125rem，增加20% */
+            }
+
+            .sidebar li {
+                font-size: 1.05rem; /* 原 0.875rem，增加20% */
+            }
+
             .toggle-sidebar {
                 display: none;
             }
@@ -374,7 +382,7 @@
 
         @media (max-width: 767px) {
             .sidebar {
-                max-width: 35%; /* 从 25% 增加到 35% */
+                max-width: 35%;
                 margin-right: 0;
                 padding: 0.5rem;
             }
@@ -689,6 +697,67 @@
             }
         }
 
+        function migrateUrl(urlId) {
+            try {
+                let url, sourceCat, sourceSubcat;
+                for (const cat of categories) {
+                    const urlIndex = cat.urls.findIndex(u => u.id === urlId);
+                    if (urlIndex !== -1) {
+                        url = cat.urls[urlIndex];
+                        sourceCat = cat;
+                        sourceSubcat = null;
+                        break;
+                    }
+                    for (const subcat of cat.subcategories) {
+                        const subUrlIndex = subcat.urls.findIndex(u => u.id === urlId);
+                        if (subUrlIndex !== -1) {
+                            url = subcat.urls[subUrlIndex];
+                            sourceCat = cat;
+                            sourceSubcat = subcat;
+                            break;
+                        }
+                    }
+                    if (url) break;
+                }
+
+                if (!url) {
+                    alert('未找到该网址！');
+                    return;
+                }
+
+                const otherCats = categories.filter(c => c.id !== sourceCat.id);
+                if (otherCats.length === 0) {
+                    alert('没有其他分类可供迁移！');
+                    return;
+                }
+
+                const catNames = otherCats.map(c => c.name).join(', ');
+                const targetCatName = prompt(`请输入目标分类名称（可选分类：${catNames}）：`, otherCats[0].name);
+                if (!targetCatName) return;
+
+                const targetCat = categories.find(c => c.name === targetCatName);
+                if (!targetCat) {
+                    alert('目标分类不存在！');
+                    return;
+                }
+
+                if (sourceSubcat) {
+                    sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
+                } else {
+                    sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                }
+
+                targetCat.urls.push(url);
+                isDataSaved = false;
+                saveCategories();
+                renderCategories();
+                alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
+            } catch (e) {
+                console.error('MigrateUrl Error:', e);
+                alert('迁移失败，请检查控制台！');
+            }
+        }
+
         function renderNav() {
             try {
                 const nav = document.getElementById('nav');
@@ -793,6 +862,7 @@
                                 <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
                                 <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
                                 <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === cat.urls.length - 1 ? 'disabled' : ''}>下移</button>
+                                <button class="migrate-btn" onclick="migrateUrl('${url.id}')">迁移</button>
                             </div>
                         `;
                         urlsDiv.appendChild(urlDiv);
@@ -851,6 +921,7 @@
                                     <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
                                     <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
                                     <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === subcat.urls.length - 1 ? 'disabled' : ''}>下移</button>
+                                    <button class="migrate-btn" onclick="migrateUrl('${url.id}')">迁移</button>
                                 </div>
                             `;
                             subUrlsDiv.appendChild(urlDiv);
@@ -986,6 +1057,38 @@
             try {
                 const cat = categories.find(c => c.id === id);
                 if (!cat || !cat.isEditing) return;
+
+                const hasUrls = cat.urls.length > 0;
+                const hasSubcategories = cat.subcategories.length > 0;
+                const subcatUrls = cat.subcategories.reduce((total, subcat) => total + subcat.urls.length, 0);
+
+                let targetCat = null;
+                if (hasUrls || hasSubcategories || subcatUrls > 0) {
+                    const otherCats = categories.filter(c => c.id !== id);
+                    if (otherCats.length > 0) {
+                        const catNames = otherCats.map(c => c.name).join(', ');
+                        const confirmMsg = `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，是否迁移到其他分类？（可选分类：${catNames}）`;
+                        if (confirm(confirmMsg)) {
+                            const targetCatName = prompt(`请输入目标分类名称（可选分类：${catNames}）：`, otherCats[0].name);
+                            if (targetCatName) {
+                                targetCat = categories.find(c => c.name === targetCatName);
+                                if (!targetCat) {
+                                    alert('目标分类不存在，将直接删除！');
+                                }
+                            }
+                        }
+                    } else {
+                        const confirmMsg = `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，没有其他分类可供迁移，确认删除？`;
+                        if (!confirm(confirmMsg)) return;
+                    }
+                }
+
+                if (targetCat) {
+                    targetCat.urls.push(...cat.urls);
+                    targetCat.subcategories.push(...cat.subcategories);
+                    alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}"！`);
+                }
+
                 categories = categories.filter(c => c.id !== id);
                 isDataSaved = false;
                 saveCategories();
@@ -993,6 +1096,7 @@
                 renderNav();
             } catch (e) {
                 console.error('DeleteCategory Error:', e);
+                alert('删除失败，请检查控制台！');
             }
         }
 
