@@ -352,12 +352,12 @@
 
         @media (max-width: 767px) {
             .sidebar {
-                max-width: 100%; /* 减少右侧留白 */
+                max-width: 100%;
                 margin-right: 0;
             }
 
             .urls {
-                grid-template-columns: repeat(2, 1fr); /* 一行显示两个网址 */
+                grid-template-columns: repeat(2, 1fr);
                 gap: 0.5rem;
             }
 
@@ -371,7 +371,7 @@
 
         @media (max-width: 480px) {
             .urls {
-                grid-template-columns: repeat(2, 1fr); /* 小屏幕仍保持一行两个 */
+                grid-template-columns: repeat(2, 1fr);
             }
 
             button {
@@ -482,6 +482,7 @@
                     isDataSaved = false;
                     saveCategories();
                     renderCategories();
+                    renderNav();
                     alert('数据已从备份还原！');
                 } catch (err) {
                     console.error('Load Error:', err);
@@ -513,6 +514,7 @@
                             isDataSaved = false;
                             saveCategories();
                             renderCategories();
+                            renderNav();
                             alert('成功还原！');
                         } catch (err) {
                             console.error('Parse Error:', err);
@@ -590,6 +592,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('MoveCategory Error:', e);
             }
@@ -612,6 +615,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('MoveSubcategory Error:', e);
             }
@@ -755,7 +759,7 @@
                             <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
                             <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
                             <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
-                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${sub  : ''}>下移</button>
+                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${subcatIndex === cat.subcategories.length - 1 ? 'disabled' : ''}>下移</button>
                             <div class="urls" id="suburls-${subcat.id}"></div>
                             <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubUrl('${subcat.id}')">添加网址</button>
                         `;
@@ -797,10 +801,13 @@
                     });
 
                     if (cat.isEditing) {
-                        catDiv.querySelector(`#cat-name-${cat.id}`).oninput = e => {
-                            cat.name = e.target.value;
-                            isDataSaved = false;
-                        };
+                        const nameInput = catDiv.querySelector(`#cat-name-${cat.id}`);
+                        if (nameInput) {
+                            nameInput.oninput = e => {
+                                cat.name = e.target.value;
+                                isDataSaved = false;
+                            };
+                        }
                     }
                 });
 
@@ -816,8 +823,6 @@
                 if (updateBtn) updateBtn.className = `update-btn ${isEditMode ? '' : 'hidden'}`;
                 const creditText = document.getElementById('credit-text');
                 if (creditText) creditText.className = `${isEditMode ? '' : 'hidden'}`;
-
-                renderNav();
             } catch (e) {
                 console.error('RenderCategories Error:', e);
             }
@@ -856,6 +861,7 @@
                 const toggleBtn = document.getElementById('toggle-mode');
                 if (toggleBtn) toggleBtn.textContent = isEditMode ? '退出' : '进入';
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('ToggleMode Error:', e);
             }
@@ -867,6 +873,7 @@
             isSidebarExpanded = !isSidebarExpanded;
             sidebar.classList.toggle('expanded', isSidebarExpanded);
             toggleBtn.textContent = isSidebarExpanded ? '收缩' : '展开';
+            renderNav(); // 确保展开时导航内容正确渲染
         }
 
         function generateId(prefix) {
@@ -885,6 +892,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('AddCategory Error:', e);
                 alert('添加分类失败，请检查控制台！');
@@ -903,6 +911,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('ToggleEditCategory Error:', e);
             }
@@ -916,6 +925,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('DeleteCategory Error:', e);
             }
@@ -1015,6 +1025,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('AddSubcategory Error:', e);
             }
@@ -1036,6 +1047,7 @@
                 isDataSaved = false;
                 saveCategories();
                 renderCategories();
+                renderNav();
             } catch (e) {
                 console.error('ToggleEditSubcategory Error:', e);
             }
@@ -1050,6 +1062,7 @@
                         isDataSaved = false;
                         saveCategories();
                         renderCategories();
+                        renderNav();
                         return;
                     }
                 }
@@ -1095,9 +1108,11 @@
             renderCategories();
         }, 200));
 
+        // 初始渲染
         try {
             console.log('Script loaded');
             renderCategories();
+            renderNav();
         } catch (e) {
             console.error('Initial render failed:', e);
         }
