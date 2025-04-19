@@ -40,7 +40,7 @@
             max-width: 250px;
             background: transparent;
             border: none;
-            position: fixed;
+            position: fixed; /* 固定在顶部 */
             top: 0;
             left: 0;
             z-index: 1000;
@@ -108,7 +108,7 @@
         .content {
             flex: 1;
             max-width: 100%;
-            margin-top: 3rem;
+            margin-top: 6rem; /* 留出空间给固定的导航 */
         }
 
         .content h1 {
@@ -399,11 +399,9 @@
             }
 
             .sidebar {
-                position: sticky;
-                top: 1rem;
+                width: 200px; /* 电脑端固定宽度 */
                 background: #fff;
                 border: 1px solid #ddd;
-                width: 200px;
                 margin-right: 0.5rem;
             }
 
@@ -429,8 +427,9 @@
             }
 
             .content {
-                max-width: 1000px;
+                margin-left: 220px; /* 留出侧边栏宽度 */
                 margin-top: 0;
+                max-width: calc(100% - 220px);
             }
 
             .urls {
@@ -447,6 +446,11 @@
 
             .sidebar.expanded ul {
                 display: block;
+            }
+
+            .content {
+                margin-left: 0;
+                margin-top: 6rem; /* 手机端也要留出空间 */
             }
 
             .urls {
@@ -755,6 +759,25 @@
             }
         }
 
+        function getMigrationOptions(excludeCatId) {
+            const options = [];
+            categories.forEach(cat => {
+                if (cat.id === excludeCatId) return;
+                // 添加顶级分类
+                options.push({ id: cat.id, name: cat.name, type: 'category' });
+                // 添加子分类
+                cat.subcategories.forEach(subcat => {
+                    options.push({
+                        id: subcat.id,
+                        name: `${cat.name} > ${subcat.name}`,
+                        type: 'subcategory',
+                        parentId: cat.id
+                    });
+                });
+            });
+            return options;
+        }
+
         function showModal(message, options, onConfirm, onCancel) {
             const modal = document.createElement('div');
             modal.className = 'modal';
@@ -763,7 +786,7 @@
                     <p>${message}</p>
                     <select id="modal-select">
                         <option value="">请选择目标分类</option>
-                        ${options.map(opt => `<option value="${opt.id}">${opt.name}</option>`).join('')}
+                        ${options.map(opt => `<option value="${opt.id}:${opt.type}:${opt.parentId || ''}">${opt.name}</option>`).join('')}
                     </select>
                     <div class="modal-actions">
                         <button class="modal-confirm">确认</button>
@@ -783,7 +806,8 @@
                     alert('请选择一个目标分类！');
                     return;
                 }
-                onConfirm(selectedValue);
+                const [targetId, targetType, parentId] = selectedValue.split(':');
+                onConfirm({ id: targetId, type: targetType, parentId });
                 document.body.removeChild(modal);
             });
 
@@ -821,27 +845,39 @@
                     return;
                 }
 
-                const otherCats = categories.filter(c => c.id !== sourceCat.id);
-                if (otherCats.length === 0) {
+                const options = getMigrationOptions(sourceCat.id);
+                if (options.length === 0) {
                     alert('没有其他分类可供迁移！');
                     return;
                 }
 
                 showModal(
                     `将网址 "${url.name}" 迁移到以下分类：`,
-                    otherCats,
-                    (targetCatId) => {
-                        const targetCat = categories.find(c => c.id === targetCatId);
-                        if (sourceSubcat) {
-                            sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
-                        } else {
-                            sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                    options,
+                    ({ id: targetId, type, parentId }) => {
+                        if (type === 'category') {
+                            const targetCat = categories.find(c => c.id === targetId);
+                            if (sourceSubcat) {
+                                sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
+                            } else {
+                                sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                            }
+                            targetCat.urls.push(url);
+                            alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
+                        } else if (type === 'subcategory') {
+                            const targetCat = categories.find(c => c.id === parentId);
+                            const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
+                            if (sourceSubcat) {
+                                sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
+                            } else {
+                                sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                            }
+                            targetSubcat.urls.push(url);
+                            alert(`网址 "${url.name}" 已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"！`);
                         }
-                        targetCat.urls.push(url);
                         isDataSaved = false;
                         saveCategories();
                         renderCategories();
-                        alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
                     },
                     () => {} // 取消时不执行任何操作
                 );
@@ -1156,25 +1192,35 @@
                 const subcatUrls = cat.subcategories.reduce((total, subcat) => total + subcat.urls.length, 0);
 
                 if (hasUrls || hasSubcategories || subcatUrls > 0) {
-                    const otherCats = categories.filter(c => c.id !== id);
-                    if (otherCats.length === 0) {
+                    const options = getMigrationOptions(cat.id);
+                    if (options.length === 0) {
                         alert('没有其他分类可供迁移，无法删除！请先创建新分类或清空内容。');
                         return;
                     }
 
                     showModal(
                         `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，请选择迁移目标：`,
-                        otherCats,
-                        (targetCatId) => {
-                            const targetCat = categories.find(c => c.id === targetCatId);
-                            targetCat.urls.push(...cat.urls);
-                            targetCat.subcategories.push(...cat.subcategories);
+                        options,
+                        ({ id: targetId, type, parentId }) => {
+                            if (type === 'category') {
+                                const targetCat = categories.find(c => c.id === targetId);
+                                targetCat.urls.push(...cat.urls);
+                                targetCat.subcategories.push(...cat.subcategories);
+                                alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}" 并删除！`);
+                            } else if (type === 'subcategory') {
+                                const targetCat = categories.find(c => c.id === parentId);
+                                const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
+                                targetSubcat.urls.push(...cat.urls);
+                                cat.subcategories.forEach(subcat => {
+                                    subcat.urls.forEach(url => targetSubcat.urls.push(url));
+                                });
+                                alert(`分类 "${cat.name}" 的所有网址已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"，子分类已丢弃并删除！`);
+                            }
                             categories = categories.filter(c => c.id !== id);
                             isDataSaved = false;
                             saveCategories();
                             renderCategories();
                             renderNav();
-                            alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}" 并删除！`);
                         },
                         () => {
                             alert('必须迁移内容后才能删除分类！');
