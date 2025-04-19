@@ -38,12 +38,12 @@
         .sidebar {
             width: 100%;
             max-width: 250px;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            position: sticky;
-            top: 0.5rem;
+            background: transparent; /* 背景透明 */
+            border: none; /* 移除边框 */
+            position: fixed; /* 浮层显示 */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* 确保在最上层 */
         }
 
         .sidebar-header {
@@ -51,6 +51,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.625rem;
+            background: rgba(255, 255, 255, 0.8); /* 头部背景略透明 */
+            border-radius: 8px;
         }
 
         .sidebar h3 {
@@ -71,6 +73,9 @@
             list-style: none;
             padding: 0.625rem;
             display: none; /* 默认隐藏 */
+            background: rgba(255, 255, 255, 0.8); /* 导航背景略透明 */
+            border-radius: 8px;
+            margin-top: 0.5rem;
         }
 
         .sidebar.expanded ul {
@@ -80,12 +85,12 @@
         .sidebar li {
             padding: 0.5rem 0.625rem;
             cursor: pointer;
-            border-bottom: 1px solid #eee;
             transition: background 0.2s;
+            color: #333; /* 确保文字可见 */
         }
 
         .sidebar li:hover {
-            background: #f0f0f0;
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .sidebar ul ul {
@@ -96,6 +101,7 @@
         .content {
             flex: 1;
             max-width: 100%;
+            margin-top: 3rem; /* 避免被固定定位的导航遮挡 */
         }
 
         .content h1 {
@@ -328,13 +334,21 @@
             }
 
             .sidebar {
+                position: sticky; /* 桌面端恢复 sticky 定位 */
+                top: 1rem;
+                background: #fff; /* 桌面端恢复白色背景 */
+                border: 1px solid #ddd;
                 width: 200px;
                 margin-right: 0.5rem;
-                margin-bottom: 0;
+            }
+
+            .sidebar-header {
+                background: transparent; /* 桌面端头部不需要透明背景 */
             }
 
             .sidebar ul {
                 display: block; /* 桌面端默认展开 */
+                background: transparent; /* 桌面端不需要透明背景 */
             }
 
             .toggle-sidebar {
@@ -343,6 +357,7 @@
 
             .content {
                 max-width: 1000px;
+                margin-top: 0; /* 桌面端无需额外顶部间距 */
             }
 
             .urls {
@@ -354,6 +369,11 @@
             .sidebar {
                 max-width: 100%;
                 margin-right: 0;
+                padding: 0.5rem;
+            }
+
+            .sidebar.expanded ul {
+                display: block; /* 确保手机端展开时显示 */
             }
 
             .urls {
@@ -394,7 +414,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>分类导航</h3>
-            <button class="toggle-sidebar" onclick="toggleSidebar()">展开</button>
+            <button class="toggle-sidebar" onclick="toggleSidebar()">收缩</button>
         </div>
         <ul id="nav"></ul>
     </div>
@@ -451,7 +471,7 @@
         let isEditMode = false;
         let isDataSaved = true;
         let backupFiles = [];
-        let isSidebarExpanded = false;
+        let isSidebarExpanded = true; // 默认展开
 
         function loadCategories() {
             try {
@@ -873,7 +893,7 @@
             isSidebarExpanded = !isSidebarExpanded;
             sidebar.classList.toggle('expanded', isSidebarExpanded);
             toggleBtn.textContent = isSidebarExpanded ? '收缩' : '展开';
-            renderNav(); // 确保展开时导航内容正确渲染
+            renderNav();
         }
 
         function generateId(prefix) {
@@ -1108,7 +1128,14 @@
             renderCategories();
         }, 200));
 
-        // 初始渲染
+        // 初始渲染时确保展开状态
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 767) {
+                sidebar.classList.add('expanded'); // 手机端默认展开
+            }
+        });
+
         try {
             console.log('Script loaded');
             renderCategories();
