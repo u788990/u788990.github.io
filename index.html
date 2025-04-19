@@ -48,13 +48,13 @@
 
         .sidebar-header {
             padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.1); /* 完全透明背景 */
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
         }
 
         .sidebar h3 {
             margin: 0;
-            color: #007bff;
+            color: #28a745; /* 改为绿色 */
             font-size: 1.125rem;
             font-weight: bold;
         }
@@ -66,7 +66,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #007bff;
+            color: #28a745; /* 改为绿色 */
             text-align: center;
             padding: 0.5rem 0;
         }
@@ -75,7 +75,7 @@
             list-style: none;
             padding: 0.5rem;
             display: none;
-            background: rgba(255, 255, 255, 0.1); /* 完全透明背景 */
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             margin-top: 0.5rem;
         }
@@ -88,10 +88,9 @@
             padding: 0.5rem 0.625rem;
             cursor: pointer;
             transition: background 0.2s;
-            color: #007bff;
+            color: #28a745; /* 改为绿色 */
             font-weight: bold;
             font-size: 0.875rem;
-            /* 移除 text-overflow 和 nowrap，确保文字完整显示 */
         }
 
         .sidebar li:hover {
@@ -99,7 +98,10 @@
         }
 
         .sidebar ul ul {
-            margin-left: 0.9375rem;
+            margin-left: 0.1875rem; /* 原 0.9375rem，减少80% */
+            margin-top: 0.1rem; /* 原 0.5rem，减少80% */
+            margin-bottom: 0.1rem; /* 原 0.5rem，减少80% */
+            padding: 0.1rem; /* 原 0.5rem，减少80% */
         }
 
         /* 内容区域样式 */
@@ -372,7 +374,7 @@
 
         @media (max-width: 767px) {
             .sidebar {
-                max-width: 25%;
+                max-width: 35%; /* 从 25% 增加到 35% */
                 margin-right: 0;
                 padding: 0.5rem;
             }
@@ -698,7 +700,7 @@
                 categories.forEach(cat => {
                     const li = document.createElement('li');
                     li.textContent = cat.name;
-                    li.dataset.catId = cat.id; // 添加 data 属性以便调试
+                    li.dataset.catId = cat.id;
                     li.addEventListener('click', () => {
                         const target = document.getElementById(cat.id);
                         if (target) {
@@ -714,7 +716,7 @@
                         cat.subcategories.forEach(subcat => {
                             const subLi = document.createElement('li');
                             subLi.textContent = subcat.name;
-                            subLi.dataset.subcatId = subcat.id; // 添加 data 属性以便调试
+                            subLi.dataset.subcatId = subcat.id;
                             subLi.addEventListener('click', () => {
                                 const target = document.getElementById(subcat.id);
                                 if (target) {
