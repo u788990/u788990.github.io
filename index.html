@@ -40,7 +40,7 @@
             max-width: 250px;
             background: transparent;
             border: none;
-            position: fixed; /* 固定在顶部 */
+            position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
@@ -54,8 +54,8 @@
 
         .sidebar h3 {
             margin: 0;
-            color: #ff69b4; /* 粉红色 */
-            font-size: 1.4625rem; /* 原 1.125rem，增加 30% */
+            color: #ff69b4;
+            font-size: 1.35rem; /* 手机端默认大小 */
             font-weight: bold;
         }
 
@@ -66,7 +66,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #ff69b4; /* 粉红色 */
+            color: #ff69b4;
             text-align: center;
             padding: 0.5rem 0;
         }
@@ -78,8 +78,8 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             margin-top: 0.5rem;
-            max-height: 80vh; /* 最大高度限制 */
-            overflow-y: auto; /* 内容过长时滚动 */
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .sidebar.expanded ul {
@@ -90,7 +90,7 @@
             padding: 0.5rem 0.625rem;
             cursor: pointer;
             transition: background 0.2s;
-            color: #ff69b4; /* 粉红色 */
+            color: #ff69b4;
             font-weight: bold;
             font-size: 0.875rem;
         }
@@ -110,7 +110,7 @@
         .content {
             flex: 1;
             max-width: 100%;
-            margin-top: 6rem; /* 留出空间给固定的导航 */
+            margin-top: 6rem;
         }
 
         .content h1 {
@@ -128,6 +128,7 @@
             color: white;
             cursor: pointer;
             transition: background 0.2s;
+            float: right; /* 使“进入”按钮右对齐 */
         }
 
         #toggle-mode:hover {
@@ -163,8 +164,10 @@
         #credit-text {
             font-size: 0.875rem;
             color: #666;
-            margin-top: 0.625rem;
-            text-align: right;
+            margin-top: 0.5rem;
+            margin-bottom: 1.25rem;
+            display: block;
+            clear: both; /* 清除浮动，确保在h1下方 */
         }
 
         .button-group {
@@ -172,6 +175,7 @@
             flex-wrap: wrap;
             gap: 0.625rem;
             margin-bottom: 1.25rem;
+            align-items: center;
         }
 
         .category {
@@ -194,7 +198,7 @@
         .urls {
             margin: 0.3125rem 0 0.3125rem 1.25rem;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 调整为150px以显示8个网址 */
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 0.625rem;
         }
 
@@ -401,10 +405,10 @@
             }
 
             .sidebar {
-                width: 200px; /* 电脑端固定宽度 */
+                width: 200px;
                 background: #fff;
                 border: 1px solid #ddd;
-                margin-right: 0.5rem;
+                margin-right: 0.25rem; /* 保留减少的留白 */
             }
 
             .sidebar-header {
@@ -417,11 +421,11 @@
             }
 
             .sidebar h3 {
-                font-size: 1.755rem; /* 原 1.35rem，增加 30% */
+                font-size: 1.55em; /* 电脑端分类导航标题字体大小 */
             }
 
             .sidebar li {
-                font-size: 1.05rem; /* 原 0.875rem，增加 20% */
+                font-size: 1.45rem; /* 分类导航下字体大小 */
             }
 
             .toggle-sidebar {
@@ -429,13 +433,13 @@
             }
 
             .content {
-                margin-left: 220px; /* 留出侧边栏宽度 */
+                margin-left: 220px;
                 margin-top: 0;
                 max-width: calc(100% - 220px);
             }
 
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 电脑端也显示更多网址 */
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
 
@@ -452,19 +456,17 @@
 
             .content {
                 margin-left: 0;
-                margin-top: 6rem; /* 手机端也要留出空间 */
+                margin-top: 6rem;
             }
 
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 手机端也调整为150px */
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 0.5rem;
             }
 
             #credit-text {
-                position: static;
-                margin-top: 0.625rem;
-                text-align: right;
-                width: 100%;
+                margin-top: 0.5rem;
+                margin-bottom: 1.25rem;
             }
         }
 
@@ -501,16 +503,18 @@
     </div>
 
     <div class="content">
-        <h1>个人网址导航 - BieKuai</h1>
-        <div class="button-group">
+        <div class="header-group">
+            <h1>个人网址导航 - BieKuai</h1>
             <button id="toggle-mode" onclick="toggleMode()">进入</button>
+        </div>
+        <span id="credit-text">创意制作 u789908@163.com</span>
+        <div class="button-group">
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
             <button class="restore-btn hidden" onclick="document.getElementById('data-file').click()">还原备份</button>
             <input type="file" id="data-file" accept=".json">
             <input type="text" id="update-file-input" class="hidden" placeholder="输入备份文件名">
             <button class="update-btn hidden" onclick="updateOnline()">在线更新</button>
         </div>
-        <span id="credit-text">创意制作 u789908@163.com</span>
         <div id="categories"></div>
         <button class="add-btn hidden" onclick="addCategory()">添加分类</button>
     </div>
@@ -548,7 +552,7 @@
         const fileName = window.location.pathname.split('/').pop().replace(/\.[^/.]+$/, '') || 'index';
         const storageKey = `webstack-${fileName}`;
 
-        let categorieslant = loadCategories();
+        let categories = loadCategories();
         let isEditMode = false;
         let isDataSaved = true;
         let backupFiles = [];
@@ -765,9 +769,7 @@
             const options = [];
             categories.forEach(cat => {
                 if (cat.id === excludeCatId) return;
-                // 添加顶级分类
                 options.push({ id: cat.id, name: cat.name, type: 'category' });
-                // 添加子分类
                 cat.subcategories.forEach(subcat => {
                     options.push({
                         id: subcat.id,
@@ -805,7 +807,7 @@
             confirmBtn.addEventListener('click', () => {
                 const selectedValue = select.value;
                 if (!selectedValue) {
-                    alert('请选择一个目标分类！');
+                    alert('请先选择一个目标分类！');
                     return;
                 }
                 const [targetId, targetType, parentId] = selectedValue.split(':');
@@ -881,7 +883,7 @@
                         saveCategories();
                         renderCategories();
                     },
-                    () => {} // 取消时不执行任何操作
+                    () => {}
                 );
             } catch (e) {
                 console.error('MigrateUrl Error:', e);
@@ -1210,9 +1212,7 @@
                             } else if (type === 'subcategory') {
                                 const targetCat = categories.find(c => c.id === parentId);
                                 const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
-                                // 迁移顶级网址
                                 targetSubcat.urls.push(...cat.urls);
-                                // 迁移子分类中的所有网址
                                 cat.subcategories.forEach(subcat => {
                                     targetSubcat.urls.push(...subcat.urls);
                                 });
@@ -1420,7 +1420,6 @@
             renderCategories();
         }, 200));
 
-        // 初始渲染时确保展开状态
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const sidebar = document.getElementById('sidebar');
