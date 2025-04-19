@@ -7,7 +7,6 @@
     <meta name="format-detection" content="telephone=no">
     <title>个人网址导航 - BieKuai</title>
     
-    <!-- 添加红B绿K的BK图标 -->
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRkZGRkZGIi8+Cjx0ZXh0IHg9IjgiIHk9IjQ4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjRkYwMDAwIj5CPC90ZXh0Pgo8dGV4dCB4PSIzMiIgeT0iNDgiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwMDhFMzgiPks8L3RleHQ+Cjwvc3ZnPg==" type="image/svg+xml">
     
     <style>
@@ -34,13 +33,12 @@
             line-height: 1.5;
         }
 
-        /* 侧边栏样式 */
         .sidebar {
             width: 100%;
             max-width: 250px;
             background: transparent;
             border: none;
-            position: fixed; /* 固定在顶部 */
+            position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
@@ -54,7 +52,7 @@
 
         .sidebar h3 {
             margin: 0;
-            color: #ff69b4; /* 粉红色 */
+            color: #ff69b4;
             font-size: 1.125rem;
             font-weight: bold;
         }
@@ -66,7 +64,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #ff69b4; /* 粉红色 */
+            color: #ff69b4;
             text-align: center;
             padding: 0.5rem 0;
         }
@@ -78,8 +76,8 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             margin-top: 0.5rem;
-            max-height: 80vh; /* 最大高度限制 */
-            overflow-y: auto; /* 内容过长时滚动 */
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .sidebar.expanded ul {
@@ -90,7 +88,7 @@
             padding: 0.5rem 0.625rem;
             cursor: pointer;
             transition: background 0.2s;
-            color: #ff69b4; /* 粉红色 */
+            color: #ff69b4;
             font-weight: bold;
             font-size: 0.875rem;
         }
@@ -106,11 +104,10 @@
             padding: 0.1rem;
         }
 
-        /* 内容区域样式 */
         .content {
             flex: 1;
             max-width: 100%;
-            margin-top: 6rem; /* 留出空间给固定的导航 */
+            margin-top: 6rem;
         }
 
         .content h1 {
@@ -167,6 +164,28 @@
             text-align: right;
         }
 
+        #credit-text a {
+            color: #666;
+            text-decoration: none;
+            pointer-events: none;
+        }
+
+        .save-tip {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.625rem;
+            text-align: left;
+        }
+
+        .save-tip a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .save-tip a:hover {
+            text-decoration: underline;
+        }
+
         .button-group {
             display: flex;
             flex-wrap: wrap;
@@ -194,7 +213,7 @@
         .urls {
             margin: 0.3125rem 0 0.3125rem 1.25rem;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 调整为150px以显示8个网址 */
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 0.625rem;
         }
 
@@ -335,7 +354,6 @@
             display: none;
         }
 
-        /* 模态框样式 */
         .modal {
             position: fixed;
             top: 0;
@@ -393,7 +411,6 @@
             background: #c82333;
         }
 
-        /* 响应式设计 */
         @media (min-width: 768px) {
             body {
                 flex-direction: row;
@@ -401,7 +418,7 @@
             }
 
             .sidebar {
-                width: 200px; /* 电脑端固定宽度 */
+                width: 200px;
                 background: #fff;
                 border: 1px solid #ddd;
                 margin-right: 0.5rem;
@@ -417,11 +434,11 @@
             }
 
             .sidebar h3 {
-                font-size: 1.35rem; /* 原 1.125rem，增加20% */
+                font-size: 1.35rem;
             }
 
             .sidebar li {
-                font-size: 1.05rem; /* 原 0.875rem，增加20% */
+                font-size: 1.05rem;
             }
 
             .toggle-sidebar {
@@ -429,13 +446,13 @@
             }
 
             .content {
-                margin-left: 220px; /* 留出侧边栏宽度 */
+                margin-left: 220px;
                 margin-top: 0;
                 max-width: calc(100% - 220px);
             }
 
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 电脑端也显示更多网址 */
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
 
@@ -452,11 +469,11 @@
 
             .content {
                 margin-left: 0;
-                margin-top: 6rem; /* 手机端也要留出空间 */
+                margin-top: 6rem;
             }
 
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 手机端也调整为150px */
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 0.5rem;
             }
 
@@ -494,9 +511,7 @@
         <div class="sidebar-header">
             <h3>分类导航</h3>
         </div>
-        <ul id="nav">
-            <!-- 导航内容将动态填充 -->
-        </ul>
+        <ul id="nav"></ul>
         <button class="toggle-sidebar" onclick="toggleSidebar()">▼</button>
     </div>
 
@@ -505,7 +520,7 @@
         <div class="button-group">
             <button id="toggle-mode" onclick="toggleMode()">进入</button>
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
-            <button class="restore-btn hidden" onclick="document.getElementById('data-file').click()">还原备份</button>
+            <button class="restore-btn hidden" onclick="document.getElementById('data-file').clickEst()">还原备份</button>
             <input type="file" id="data-file" accept=".json">
             <input type="text" id="update-file-input" class="hidden" placeholder="输入备份文件名">
             <button class="update-btn hidden" onclick="updateOnline()">在线更新</button>
@@ -765,9 +780,7 @@
             const options = [];
             categories.forEach(cat => {
                 if (cat.id === excludeCatId) return;
-                // 添加顶级分类
                 options.push({ id: cat.id, name: cat.name, type: 'category' });
-                // 添加子分类
                 cat.subcategories.forEach(subcat => {
                     options.push({
                         id: subcat.id,
@@ -881,7 +894,7 @@
                         saveCategories();
                         renderCategories();
                     },
-                    () => {} // 取消时不执行任何操作
+                    () => {}
                 );
             } catch (e) {
                 console.error('MigrateUrl Error:', e);
@@ -892,22 +905,14 @@
         function renderNav() {
             try {
                 const nav = document.getElementById('nav');
-                if (!nav) {
-                    console.error('Nav element not found');
-                    return;
-                }
+                if (!nav) return;
                 nav.innerHTML = '';
                 categories.forEach(cat => {
                     const li = document.createElement('li');
                     li.textContent = cat.name;
                     li.dataset.catId = cat.id;
                     li.addEventListener('click', () => {
-                        const target = document.getElementById(cat.id);
-                        if (target) {
-                            target.scrollIntoView({ behavior: 'smooth' });
-                        } else {
-                            console.warn(`Category element with ID ${cat.id} not found`);
-                        }
+                        document.getElementById(cat.id)?.scrollIntoView({ behavior: 'smooth' });
                     });
                     nav.appendChild(li);
 
@@ -918,12 +923,7 @@
                             subLi.textContent = subcat.name;
                             subLi.dataset.subcatId = subcat.id;
                             subLi.addEventListener('click', () => {
-                                const target = document.getElementById(subcat.id);
-                                if (target) {
-                                    target.scrollIntoView({ behavior: 'smooth' });
-                                } else {
-                                    console.warn(`Subcategory element with ID ${subcat.id} not found`);
-                                }
+                                document.getElementById(subcat.id)?.scrollIntoView({ behavior: 'smooth' });
                             });
                             subUl.appendChild(subLi);
                         });
@@ -938,10 +938,7 @@
         function renderCategories() {
             try {
                 const container = document.getElementById('categories');
-                if (!container) {
-                    console.error('Categories container not found');
-                    return;
-                }
+                if (!container) return;
                 container.innerHTML = '';
                 categories.forEach((cat, catIndex) => {
                     const catDiv = document.createElement('div');
@@ -961,10 +958,6 @@
                     container.appendChild(catDiv);
 
                     const urlsDiv = catDiv.querySelector(`#urls-${cat.id}`);
-                    if (!urlsDiv) {
-                        console.warn(`Urls container for category ${cat.id} not found`);
-                        return;
-                    }
                     cat.urls.forEach((url, urlIndex) => {
                         const urlDiv = document.createElement('div');
                         urlDiv.className = 'url';
@@ -1000,10 +993,6 @@
                     });
 
                     const subcatsDiv = catDiv.querySelector(`#subcats-${cat.id}`);
-                    if (!subcatsDiv) {
-                        console.warn(`Subcategories container for category ${cat.id} not found`);
-                        return;
-                    }
                     cat.subcategories.forEach((subcat, subcatIndex) => {
                         const subcatDiv = document.createElement('div');
                         subcatDiv.className = 'subcategory';
@@ -1020,10 +1009,6 @@
                         subcatsDiv.appendChild(subcatDiv);
 
                         const subUrlsDiv = subcatDiv.querySelector(`#suburls-${subcat.id}`);
-                        if (!subUrlsDiv) {
-                            console.warn(`Suburls container for subcategory ${subcat.id} not found`);
-                            return;
-                        }
                         subcat.urls.forEach((url, urlIndex) => {
                             const urlDiv = document.createElement('div');
                             urlDiv.className = 'url';
@@ -1092,15 +1077,8 @@
                 if (isEditMode) {
                     let hasEditing = false;
                     for (const cat of categories) {
-                        if (cat.isEditing) {
-                            hasEditing = true;
-                            break;
-                        }
-                        if (cat.urls.some(url => url.isEditing)) {
-                            hasEditing = true;
-                            break;
-                        }
-                        if (cat.subcategories.some(subcat => subcat.isEditing || subcat.urls.some(url => url.isEditing))) {
+                        if (cat.isEditing || cat.urls.some(url => url.isEditing) || 
+                            cat.subcategories.some(subcat => subcat.isEditing || subcat.urls.some(url => url.isEditing))) {
                             hasEditing = true;
                             break;
                         }
@@ -1119,6 +1097,7 @@
                 }
                 const toggleBtn = document.getElementById('toggle-mode');
                 if (toggleBtn) toggleBtn.textContent = isEditMode ? '退出' : '进入';
+
                 renderCategories();
                 renderNav();
             } catch (e) {
@@ -1130,10 +1109,7 @@
             try {
                 const sidebar = document.getElementById('sidebar');
                 const toggleBtn = document.querySelector('.toggle-sidebar');
-                if (!sidebar || !toggleBtn) {
-                    console.error('Sidebar or toggle button not found');
-                    return;
-                }
+                if (!sidebar || !toggleBtn) return;
                 isSidebarExpanded = !isSidebarExpanded;
                 sidebar.classList.toggle('expanded', isSidebarExpanded);
                 toggleBtn.textContent = isSidebarExpanded ? '▼' : '▲';
@@ -1212,9 +1188,7 @@
                             } else if (type === 'subcategory') {
                                 const targetCat = categories.find(c => c.id === parentId);
                                 const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
-                                // 迁移顶级网址
                                 targetSubcat.urls.push(...cat.urls);
-                                // 迁移子分类中的所有网址
                                 cat.subcategories.forEach(subcat => {
                                     targetSubcat.urls.push(...subcat.urls);
                                 });
@@ -1422,14 +1396,9 @@
             renderCategories();
         }, 200));
 
-        // 初始渲染时确保展开状态
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const sidebar = document.getElementById('sidebar');
-                if (!sidebar) {
-                    console.error('Sidebar element not found on DOM load');
-                    return;
-                }
                 if (window.innerWidth <= 767) {
                     sidebar.classList.add('expanded');
                 }
@@ -1440,13 +1409,8 @@
             }
         });
 
-        try {
-            console.log('Script loaded');
-            renderCategories();
-            renderNav();
-        } catch (e) {
-            console.error('Initial render failed:', e);
-        }
+        renderCategories();
+        renderNav();
     </script>
 </body>
 </html>
