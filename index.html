@@ -47,16 +47,18 @@
         }
 
         .sidebar-header {
-            padding: 0.625rem;
-            background: rgba(255, 255, 255, 0.8);
+            padding: 0.3125rem; /* 原 0.625rem，减少50% */
+            background: rgba(255, 255, 255, 0.3); /* 半透明背景 */
+            backdrop-filter: blur(5px); /* 模糊效果，模拟玻璃 */
+            -webkit-backdrop-filter: blur(5px); /* 兼容 Safari */
             border-radius: 8px;
         }
 
         .sidebar h3 {
             margin: 0;
-            color: #333;
+            color: #007bff; /* 蓝色文字 */
             font-size: 1.125rem;
-            font-weight: bold; /* 标题加粗 */
+            font-weight: bold;
         }
 
         .toggle-sidebar {
@@ -64,20 +66,22 @@
             width: 100%;
             background: none;
             border: none;
-            font-size: 1.5rem; /* 调整三角符号大小 */
+            font-size: 1.5rem;
             cursor: pointer;
-            color: #007bff;
+            color: #007bff; /* 蓝色三角符号 */
             text-align: center;
-            padding: 0.5rem 0;
+            padding: 0.25rem 0; /* 原 0.5rem，减少50% */
         }
 
         .sidebar ul {
             list-style: none;
-            padding: 0.625rem;
+            padding: 0.3125rem; /* 原 0.625rem，减少50% */
             display: none;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.3); /* 半透明背景 */
+            backdrop-filter: blur(5px); /* 模糊效果 */
+            -webkit-backdrop-filter: blur(5px); /* 兼容 Safari */
             border-radius: 8px;
-            margin-top: 0.5rem;
+            margin-top: 0.25rem; /* 原 0.5rem，减少50% */
         }
 
         .sidebar.expanded ul {
@@ -85,11 +89,15 @@
         }
 
         .sidebar li {
-            padding: 0.5rem 0.625rem;
+            padding: 0.25rem 0.3125rem; /* 原 0.5rem 0.625rem，减少50% */
             cursor: pointer;
             transition: background 0.2s;
-            color: #333;
-            font-weight: bold; /* 导航项字体加粗 */
+            color: #007bff; /* 蓝色文字 */
+            font-weight: bold;
+            font-size: 0.875rem; /* 调整字体大小以适应一行五个字 */
+            white-space: nowrap; /* 防止换行 */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .sidebar li:hover {
@@ -97,7 +105,7 @@
         }
 
         .sidebar ul ul {
-            margin-left: 0.9375rem;
+            margin-left: 0.46875rem; /* 原 0.9375rem，减少50% */
         }
 
         /* 内容区域样式 */
@@ -347,11 +355,23 @@
 
             .sidebar-header {
                 background: transparent;
+                padding: 0.625rem; /* 桌面端恢复原始留白 */
             }
 
             .sidebar ul {
                 display: block;
                 background: transparent;
+                padding: 0.625rem; /* 桌面端恢复原始留白 */
+                margin-top: 0.5rem; /* 桌面端恢复原始留白 */
+            }
+
+            .sidebar li {
+                padding: 0.5rem 0.625rem; /* 桌面端恢复原始留白 */
+                font-size: 1rem; /* 桌面端字体稍大 */
+            }
+
+            .sidebar ul ul {
+                margin-left: 0.9375rem; /* 桌面端恢复原始留白 */
             }
 
             .toggle-sidebar {
@@ -370,9 +390,9 @@
 
         @media (max-width: 767px) {
             .sidebar {
-                max-width: 25%; /* 手机端宽度为屏幕的25% */
+                max-width: 25%;
                 margin-right: 0;
-                padding: 0.5rem;
+                padding: 0.25rem; /* 原 0.5rem，减少50% */
             }
 
             .sidebar.expanded ul {
@@ -878,7 +898,7 @@
                     if (!isDataSaved) {
                         alert('数据未保存，请点击“保存备份”后再退出！');
                         return;
-                    }
+ ABOVE:  }
                     isEditMode = false;
                 } else {
                     isEditMode = true;
