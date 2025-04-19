@@ -25,7 +25,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
             margin: 0;
             padding: 0.5rem;
             display: flex;
@@ -116,7 +116,7 @@
 
         .content h1 {
             color: #222;
-            font-size: 1.5rem;
+            font-size: 1.8rem; /* 原1.5rem增加20%，保持不变 */
             margin-bottom: 0.625rem;
             display: inline-block;
         }
@@ -163,12 +163,31 @@
         }
 
         #credit-text {
-            font-size: 0.875rem;
-            color: #666;
+            font-size: 0.875rem; /* 基础字体大小，图像继承 */
             margin-top: 0.5rem;
             margin-bottom: 1.25rem;
-            display: block;
+            display: flex;
+            align-items: center; /* 文本和图像整体垂直居中 */
             clear: both; /* 清除浮动，确保在h1下方 */
+            gap: 10px; /* 文本和图像间距 */
+        }
+
+        #credit-text .text-part {
+            background: #008E38; /* 绿底 */
+            color: #FFFFFF; /* 白字 */
+            font-size: 1.14rem; /* 原0.875rem增大30%，约18.24px */
+            padding: 8px 10px; /* 上下8px，左右10px */
+            height: 39px; /* 总高度39px（56px降低30%） */
+            display: flex;
+            align-items: flex-end; /* 垂直向下对齐 */
+            justify-content: center; /* 水平居中 */
+            border-radius: 4px; /* 圆角 */
+            font-family: Arial, 'Microsoft YaHei', sans-serif; /* 中文字体支持 */
+        }
+
+        #credit-text img {
+            height: 39px; /* 原56px降低30% */
+            vertical-align: middle;
         }
 
         .button-group {
@@ -439,6 +458,10 @@
                 max-width: calc(100% - 220px);
             }
 
+            .content h1 {
+                font-size: 1.8rem; /* 电脑端标题保持1.8rem */
+            }
+
             .urls {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
@@ -458,6 +481,10 @@
             .content {
                 margin-left: 0;
                 margin-top: 6rem;
+            }
+
+            .content h1 {
+                font-size: 1.8rem; /* 手机端标题保持1.8rem */
             }
 
             .urls {
@@ -508,7 +535,10 @@
             <h1>个人网址导航 - BieKuai</h1>
             <button id="toggle-mode" onclick="toggleMode()">进入</button>
         </div>
-        <span id="credit-text">创意制作 u789908@163.com</span>
+        <div id="credit-text">
+            <span class="text-part">创意制作</span>
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjA4IiBoZWlnaHQ9IjM5IiB2aWV3Qm94PSIwIDAgMjA4IDM5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIyMDgiIGhlaWdodD0iMzkiIGZpbGw9IiMwMDhFMzgiLz4KICA8dGV4dCB4PSIxMDQiIHk9IjI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIE1pY3Jvc29mdCBZYUhlaSwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iI0ZGRkZGRiI+dTc4OTkwOEAxNjMuY29tPC90ZXh0Pgo8L3N2Zz4=" alt="u789908@163.com">
+        </div>
         <div class="button-group">
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
             <button class="restore-btn hidden" onclick="document.getElementById('data-file').click()">还原备份</button>
