@@ -2,28 +2,22 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <title>个人网址导航 - BieKuai</title>
-    
-    <!-- 添加红B绿K的BK图标 -->
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRkZGRkZGIi8+Cjx0ZXh0IHg9IjgiIHk9IjQ4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjRkYwMDAwIj5CPC90ZXh0Pgo8dGV4dCB4PSIzMiIgeT0iNDgiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwMDhFMzgiPks8L3RleHQ+Cjwvc3ZnPg==" type="image/svg+xml">
-    
     <style>
         *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         html {
             font-size: 16px;
             -webkit-text-size-adjust: 100%;
             -webkit-tap-highlight-color: transparent;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
             margin: 0;
@@ -34,8 +28,6 @@
             min-height: 100vh;
             line-height: 1.5;
         }
-
-        /* 侧边栏样式 */
         .sidebar {
             width: 100%;
             max-width: 250px;
@@ -46,20 +38,17 @@
             left: 0;
             z-index: 1000;
         }
-
         .sidebar-header {
             padding: 0.5rem;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
         }
-
         .sidebar h3 {
             margin: 0;
             color: #ff69b4;
-            font-size: 1.35rem; /* 手机端默认大小 */
+            font-size: 1.35rem;
             font-weight: bold;
         }
-
         .toggle-sidebar {
             display: block;
             width: 100%;
@@ -71,7 +60,6 @@
             text-align: center;
             padding: 0.5rem 0;
         }
-
         .sidebar ul {
             list-style: none;
             padding: 0.5rem;
@@ -82,11 +70,9 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-
         .sidebar.expanded ul {
             display: block;
         }
-
         .sidebar li {
             padding: 0.5rem 0.625rem;
             cursor: pointer;
@@ -95,32 +81,20 @@
             font-weight: bold;
             font-size: 0.875rem;
         }
-
         .sidebar li:hover {
             background: rgba(0, 0, 0, 0.1);
         }
-
-        .sidebar ul ul {
-            margin-left: 0.1875rem;
-            margin-top: 0.1rem;
-            margin-bottom: 0.1rem;
-            padding: 0.1rem;
-        }
-
-        /* 内容区域样式 */
         .content {
             flex: 1;
             max-width: 100%;
             margin-top: 6rem;
         }
-
         .content h1 {
             color: #222;
-            font-size: 1.8rem; /* 原1.5rem增加20%，保持不变 */
+            font-size: 1.8rem;
             margin-bottom: 0.625rem;
             display: inline-block;
         }
-
         #toggle-mode {
             padding: 0.5rem 0.75rem;
             border: none;
@@ -129,13 +103,11 @@
             color: white;
             cursor: pointer;
             transition: background 0.2s;
-            float: right; /* 使“进入”按钮右对齐 */
+            float: right;
         }
-
         #toggle-mode:hover {
             background: #138496;
         }
-
         .save-btn, .restore-btn, .update-btn, .download-btn {
             padding: 0.5rem 0.75rem;
             border: none;
@@ -145,52 +117,46 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-
         .save-btn:hover, .restore-btn:hover, .update-btn:hover, .download-btn:hover {
             background: #e0a800;
         }
-
         #data-file {
             display: none;
         }
-
         #update-file-input {
             padding: 0.5rem;
             border: 1px solid #ddd;
             border-radius: 4px;
             width: 100%;
             max-width: 200px;
+            font-size: 0.875rem;
         }
-
         #credit-text {
-            font-size: 0.875rem; /* 基础字体大小，图像继承 */
+            font-size: 0.875rem;
             margin-top: 0.5rem;
             margin-bottom: 1.25rem;
             display: flex;
-            align-items: center; /* 文本和图像整体垂直居中 */
-            clear: both; /* 清除浮动，确保在h1下方 */
-            gap: 10px; /* 文本和图像间距 */
-            flex-wrap: wrap; /* 允许换行以适应小屏幕 */
+            align-items: center;
+            clear: both;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-
         #credit-text .text-part {
-            background: #008E38; /* 绿底 */
-            color: #FFFFFF; /* 白字 */
-            font-size: 1.14rem; /* 原0.875rem增大30%，约18.24px */
-            padding: 8px 10px; /* 上下8px，左右10px */
-            height: 39px; /* 总高度39px（56px降低30%） */
+            background: #008E38;
+            color: #FFFFFF;
+            font-size: 1.14rem;
+            padding: 8px 10px;
+            height: 39px;
             display: flex;
-            align-items: flex-end; /* 垂直向下对齐 */
-            justify-content: center; /* 水平居中 */
-            border-radius: 4px; /* 圆角 */
-            font-family: Arial, 'Microsoft YaHei', sans-serif; /* 中文字体支持 */
+            align-items: flex-end;
+            justify-content: center;
+            border-radius: 4px;
+            font-family: Arial, 'Microsoft YaHei', sans-serif;
         }
-
         #credit-text img {
-            height: 39px; /* 原56px降低30% */
+            height: 39px;
             vertical-align: middle;
         }
-
         .button-group {
             display: flex;
             flex-wrap: wrap;
@@ -198,7 +164,6 @@
             margin-bottom: 1.25rem;
             align-items: center;
         }
-
         .category {
             background: #fff;
             border: 1px solid #ddd;
@@ -207,7 +172,6 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         .subcategory {
             margin: 0.625rem 0 0.625rem 1.25rem;
             padding: 0.625rem;
@@ -215,14 +179,12 @@
             border: 1px solid #eee;
             border-radius: 5px;
         }
-
         .urls {
             margin: 0.3125rem 0 0.3125rem 1.25rem;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 0.625rem;
         }
-
         .url {
             padding: 0.25rem;
             background: #fff;
@@ -233,7 +195,6 @@
             align-items: flex-start;
             min-height: 60px;
         }
-
         .url img {
             width: 100%;
             height: auto;
@@ -241,12 +202,10 @@
             object-fit: contain;
             margin: 0.375rem 0.0625rem 0.125rem 0.125rem;
         }
-
         .url-icon-link {
             width: 50%;
             display: block;
         }
-
         .url-content {
             display: flex;
             flex-direction: column;
@@ -254,21 +213,17 @@
             width: 50%;
             padding-right: 0.1875rem;
         }
-
         .url-main {
             display: flex;
             align-items: flex-start;
-            gap: 0.0625rem;
             width: 100%;
         }
-
         .url-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 0.3125rem;
             margin: 0.3125rem 0 0.3125rem 0.125rem;
         }
-
         .url-name {
             color: #007bff;
             font-weight: bold;
@@ -278,7 +233,6 @@
             text-overflow: ellipsis;
             line-height: 1.2;
         }
-
         .url-desc {
             color: #666;
             font-size: 0.75rem;
@@ -287,7 +241,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         input, textarea, select {
             width: 100%;
             padding: 0.3125rem;
@@ -296,13 +249,12 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 0.875rem;
+            min-height: 36px; /* 手机端优化 */
         }
-
         textarea {
             height: 60px;
             resize: vertical;
         }
-
         button {
             padding: 0.5rem 0.75rem;
             border: none;
@@ -311,56 +263,44 @@
             transition: background 0.2s;
             font-size: 0.875rem;
         }
-
         .add-btn {
             background: #28a745;
             color: white;
         }
-
         .add-btn:hover {
             background: #218838;
         }
-
         .edit-btn {
             background: #007bff;
             color: white;
         }
-
         .edit-btn:hover {
             background: #0056b3;
         }
-
         .delete-btn {
             background: #dc3545;
             color: white;
         }
-
         .delete-btn:disabled {
             background: #6c757d;
             cursor: not-allowed;
         }
-
         .move-btn, .migrate-btn {
             background: #6c757d;
             color: white;
             padding: 0.5rem;
             font-size: 0.75rem;
         }
-
         .move-btn:hover, .migrate-btn:hover {
             background: #5a6268;
         }
-
         .move-btn:disabled, .migrate-btn:disabled {
             background: #adb5bd;
             cursor: not-allowed;
         }
-
         .hidden {
             display: none;
         }
-
-        /* 模态框样式 */
         .modal {
             position: fixed;
             top: 0;
@@ -372,8 +312,8 @@
             justify-content: center;
             align-items: center;
             z-index: 2000;
+            pointer-events: auto;
         }
-
         .modal-content {
             background: #fff;
             padding: 1rem;
@@ -381,182 +321,147 @@
             width: 90%;
             max-width: 400px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2010;
         }
-
         .modal-content p {
             margin-bottom: 1rem;
             font-size: 1rem;
             color: #333;
         }
-
         .modal-actions {
             display: flex;
             gap: 0.5rem;
             justify-content: flex-end;
         }
-
         .modal-actions button {
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
         }
-
         .modal-confirm {
             background: #28a745;
             color: white;
         }
-
         .modal-confirm:hover {
             background: #218838;
         }
-
         .modal-cancel {
             background: #dc3545;
             color: white;
         }
-
         .modal-cancel:hover {
             background: #c82333;
         }
-
-        /* 响应式设计 */
         @media (min-width: 768px) {
             body {
                 flex-direction: row;
                 padding: 1rem;
             }
-
             .sidebar {
                 width: 200px;
                 background: #fff;
                 border: 1px solid #ddd;
-                margin-right: 0.25rem; /* 保留减少的留白 */
+                margin-right: 0.25rem;
             }
-
             .sidebar-header {
                 background: transparent;
             }
-
             .sidebar ul {
                 display: block;
                 background: transparent;
             }
-
             .sidebar h3 {
-                font-size: 1.55em; /* 电脑端分类导航标题字体大小 */
+                font-size: 1.55em;
             }
-
             .sidebar li {
-                font-size: 1.45rem; /* 分类导航下字体大小 */
+                font-size: 1.45rem;
             }
-
             .toggle-sidebar {
                 display: none;
             }
-
             .content {
                 margin-left: 220px;
                 margin-top: 0;
                 max-width: calc(100% - 220px);
             }
-
             .content h1 {
-                font-size: 1.8rem; /* 电脑端标题保持1.8rem */
+                font-size: 1.8rem;
             }
-
             .urls {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
-
         @media (max-width: 767px) {
             .sidebar {
                 max-width: 35%;
                 margin-right: 0;
                 padding: 0.5rem;
             }
-
             .sidebar.expanded ul {
                 display: block;
             }
-
             .content {
                 margin-left: 0;
                 margin-top: 6rem;
             }
-
             .content h1 {
-                font-size: 1.8rem; /* 手机端标题保持1.8rem */
+                font-size: 1.8rem;
             }
-
-            /* 分类名称字体减小30% */
             .category h2 {
-                font-size: 1.26rem; /* 原1.8rem（假设h2默认继承1.8rem）减小30% */
+                font-size: 1.26rem;
             }
-
             .subcategory h4 {
-                font-size: 0.98rem; /* 原1.4rem（假设h4默认继承1.4rem）减小30% */
+                font-size: 0.98rem;
             }
-
-            /* 网址字体减小20% */
             .url-name {
-                font-size: 0.7rem; /* 原0.875rem减小20% */
+                font-size: 0.7rem;
             }
-
             .url-desc {
-                font-size: 0.6rem; /* 原0.75rem减小20% */
+                font-size: 0.6rem;
             }
-
-            /* 网址图标减小30% */
             .url img {
-                max-height: 24px; /* 原34px减小30% */
+                max-height: 24px;
             }
-
-            /* 一行显示三个网址 */
             .urls {
-                grid-template-columns: repeat(3, 1fr); /* 固定三列 */
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
                 gap: 0.5rem;
             }
-
             #credit-text {
                 margin-top: 0.5rem;
                 margin-bottom: 1.25rem;
             }
+            input, textarea {
+                font-size: 1rem;
+                min-height: 40px;
+            }
         }
-
         @media (max-width: 480px) {
             .urls {
-                grid-template-columns: repeat(3, 1fr); /* 继续保持三列 */
-                gap: 0.3rem; /* 减小间距以适应小屏幕 */
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 0.3rem;
             }
-
             .url {
-                padding: 0.2rem; /* 减小内边距 */
-                min-height: 50px; /* 减小最小高度 */
+                padding: 0.2rem;
+                min-height: 50px;
             }
-
             .url-name {
-                font-size: 0.65rem; /* 进一步减小字体 */
-                white-space: normal; /* 允许换行 */
+                font-size: 0.65rem;
+                white-space: normal;
             }
-
             .url-desc {
-                font-size: 0.55rem; /* 进一步减小字体 */
+                font-size: 0.55rem;
             }
-
             .url img {
-                max-height: 22px; /* 原34px减小约35%，稍大于30%以适应小屏幕 */
+                max-height: 22px;
             }
-
             button {
                 width: 100%;
                 text-align: center;
             }
-
             .url-actions {
                 flex-direction: column;
                 width: 100%;
             }
-
             .url-actions button {
                 width: 100%;
             }
@@ -568,12 +473,9 @@
         <div class="sidebar-header">
             <h3>分类导航</h3>
         </div>
-        <ul id="nav">
-            <!-- 导航内容将动态填充 -->
-        </ul>
+        <ul id="nav"></ul>
         <button class="toggle-sidebar" onclick="toggleSidebar()">▼</button>
     </div>
-
     <div class="content">
         <div class="header-group">
             <h1>个人网址导航 - BieKuai</h1>
@@ -588,13 +490,12 @@
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
             <button class="restore-btn hidden" onclick="document.getElementById('data-file').click()">还原备份</button>
             <input type="file" id="data-file" accept=".json">
-            <input type="text" id="update-file-input" class="hidden" placeholder="输入备份文件名" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+            <input type="text" id="update-file-input" class="hidden" placeholder="输入备份文件名">
             <button class="update-btn hidden" onclick="updateOnline()">在线更新</button>
         </div>
         <div id="categories"></div>
         <button class="add-btn hidden" onclick="addCategory()">添加分类</button>
     </div>
-
     <script>
         const defaultCategories = [
             {
@@ -624,70 +525,49 @@
                 ]
             }
         ];
-
         const fileName = window.location.pathname.split('/').pop().replace(/\.[^/.]+$/, '') || 'index';
         const storageKey = `webstack-${fileName}`;
-
         let categories = loadCategories();
         let isEditMode = false;
         let isDataSaved = true;
-        let backupFiles = [];
-        let isSidebarExpanded = true;
 
         function loadCategories() {
-            try {
-                const saved = localStorage.getItem(storageKey);
-                const loadedCategories = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultCategories));
-                // Reset isEditing to false on load to prevent persistence after refresh
-                loadedCategories.forEach(cat => {
-                    cat.isEditing = false;
-                    cat.urls.forEach(url => url.isEditing = false);
-                    cat.subcategories.forEach(subcat => {
-                        subcat.isEditing = false;
-                        subcat.urls.forEach(url => url.isEditing = false);
-                    });
+            const saved = localStorage.getItem(storageKey);
+            const loadedCategories = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultCategories));
+            loadedCategories.forEach(cat => {
+                cat.isEditing = false;
+                cat.urls.forEach(url => url.isEditing = false);
+                cat.subcategories.forEach(subcat => {
+                    subcat.isEditing = false;
+                    subcat.urls.forEach(url => url.isEditing = false);
                 });
-                return loadedCategories;
-            } catch (e) {
-                console.error('LoadCategories Error:', e);
-                return JSON.parse(JSON.stringify(defaultCategories));
-            }
+            });
+            return loadedCategories;
         }
 
         function saveCategories() {
-            try {
-                // Create a copy of categories with isEditing reset to false
-                const categoriesToSave = JSON.parse(JSON.stringify(categories));
-                categoriesToSave.forEach(cat => {
-                    cat.isEditing = false;
-                    cat.urls.forEach(url => url.isEditing = false);
-                    cat.subcategories.forEach(subcat => {
-                        subcat.isEditing = false;
-                        subcat.urls.forEach(url => url.isEditing = false);
-                    });
+            const categoriesToSave = JSON.parse(JSON.stringify(categories));
+            categoriesToSave.forEach(cat => {
+                cat.isEditing = false;
+                cat.urls.forEach(url => url.isEditing = false);
+                cat.subcategories.forEach(subcat => {
+                    subcat.isEditing = false;
+                    subcat.urls.forEach(url => url.isEditing = false);
                 });
-                localStorage.setItem(storageKey, JSON.stringify(categoriesToSave));
-            } catch (e) {
-                console.error('SaveCategories Error:', e);
-                alert('无法保存数据，可能是存储空间不足或浏览器设置限制。');
-            }
+            });
+            localStorage.setItem(storageKey, JSON.stringify(categoriesToSave));
         }
 
         function downloadPage() {
-            try {
-                const htmlContent = document.documentElement.outerHTML;
-                const blob = new Blob([htmlContent], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'BieKuai_Navigation.html';
-                a.click();
-                URL.revokeObjectURL(url);
-                alert('网页已开始下载为 BieKuai_Navigation.html');
-            } catch (e) {
-                console.error('DownloadPage Error:', e);
-                alert('下载失败，请检查控制台！');
-            }
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'BieKuai_Navigation.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('网页已开始下载为 BieKuai_Navigation.html');
         }
 
         function isMobileDevice() {
@@ -695,54 +575,44 @@
         }
 
         function fixMobileKeyboard() {
-            if (!isMobileDevice()) return; // Skip on desktop
-
+            if (!isMobileDevice()) return;
             const inputs = document.querySelectorAll('input, textarea');
             inputs.forEach(input => {
-                // Remove existing listeners to prevent duplicates
                 input.removeEventListener('touchstart', handleTouchStart);
-                input.removeEventListener('blur', handleBlur);
-
-                // Add mobile-specific attributes
-                if (input.tagName === 'INPUT') {
-                    input.setAttribute('type', 'text');
-                }
-                input.setAttribute('autocomplete', 'off');
+                input.removeEventListener('focus', handleFocus);
+                input.removeEventListener('input', handleInput);
                 input.setAttribute('autocapitalize', 'off');
                 input.setAttribute('autocorrect', 'off');
-                input.setAttribute('spellcheck', 'false');
-
-                // Add listeners
                 input.addEventListener('touchstart', handleTouchStart, { passive: false });
-                input.addEventListener('blur', handleBlur);
+                input.addEventListener('focus', handleFocus);
+                input.addEventListener('input', handleInput);
             });
 
             function handleTouchStart(e) {
                 e.stopPropagation();
                 const input = e.target;
-                setTimeout(() => {
-                    input.focus();
-                    if (input.value) {
-                        input.setSelectionRange(input.value.length, input.value.length);
-                    }
-                    // Start focus monitoring
-                    const focusCheck = setInterval(() => {
-                        if (document.activeElement !== input) {
-                            input.focus();
-                            if (input.value) {
-                                input.setSelectionRange(input.value.length, input.value.length);
-                            }
-                        }
-                    }, 50);
-                    // Stop monitoring after 1 second
-                    setTimeout(() => clearInterval(focusCheck), 1000);
-                }, 0);
+                input.focus();
             }
 
-            function handleBlur(e) {
+            function handleFocus(e) {
                 const input = e.target;
-                // Optional: Log blur events for debugging
-                // console.log('Input blurred:', input.id);
+                setTimeout(() => {
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+
+            function handleInput(e) {
+                const input = e.target;
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', () => {
+                    const activeElement = document.activeElement;
+                    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+                        activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
             }
         }
 
@@ -758,7 +628,6 @@
                     renderNav();
                     alert('数据已从备份还原！');
                 } catch (err) {
-                    console.error('Load Error:', err);
                     alert('加载失败，无效的JSON文件。');
                 }
             };
@@ -767,53 +636,35 @@
         });
 
         function updateOnline() {
-            try {
-                let filename = document.getElementById('update-file-input').value.trim();
-                if (!filename) {
-                    alert('请输入文件名！');
-                    return;
-                }
-                if (!filename.endsWith('.json')) {
-                    filename += '.json';
-                }
-                fetch(`./${filename}`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('File not found');
-                        return response.text();
-                    })
-                    .then(data => {
-                        try {
-                            categories = JSON.parse(data);
-                            saveCategories();
-                            renderCategories();
-                            renderNav();
-                            alert('成功还原！');
-                        } catch (err) {
-                            console.error('Parse Error:', err);
-                            alert('加载失败，无效的JSON文件。');
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Fetch Error:', err);
-                        alert('没有文件！');
-                    });
-            } catch (e) {
-                console.error('UpdateOnline Error:', e);
-                alert('在线更新失败，请检查控制台！');
+            let filename = document.getElementById('update-file-input').value.trim();
+            if (!filename) {
+                alert('请输入文件名！');
+                return;
             }
+            if (!filename.endsWith('.json')) {
+                filename += '.json';
+            }
+            fetch(`./${filename}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('File not found');
+                    return response.text();
+                })
+                .then(data => {
+                    categories = JSON.parse(data);
+                    saveCategories();
+                    renderCategories();
+                    renderNav();
+                    alert('成功还原！');
+                })
+                .catch(err => {
+                    alert('没有文件！');
+                });
         }
 
         function generateBackupFilename() {
             const now = new Date();
             const timestamp = `${now.getFullYear()}${padZero(now.getMonth() + 1)}${padZero(now.getDate())}-${padZero(now.getHours())}${padZero(now.getMinutes())}${padZero(now.getSeconds())}`;
-            let filename = `backup-${timestamp}.json`;
-            let counter = 1;
-            while (backupFiles.includes(filename)) {
-                filename = `backup-${timestamp}-${counter}.json`;
-                counter++;
-            }
-            backupFiles.push(filename);
-            return filename;
+            return `backup-${timestamp}.json`;
         }
 
         function padZero(num) {
@@ -821,23 +672,18 @@
         }
 
         function saveData() {
-            try {
-                const dataStr = JSON.stringify(categories, null, 2);
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const filename = generateBackupFilename();
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                a.click();
-                URL.revokeObjectURL(url);
-                isDataSaved = true;
-                saveCategories();
-                alert(`数据已保存为 ${filename}！请保存到 HTML 文件目录。`);
-            } catch (e) {
-                console.error('SaveData Error:', e);
-                alert('保存备份失败，请检查控制台！');
-            }
+            const dataStr = JSON.stringify(categories, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const filename = generateBackupFilename();
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            isDataSaved = true;
+            saveCategories();
+            alert(`数据已保存为 ${filename}！请保存到 HTML 文件目录。`);
         }
 
         function getFaviconUrl(url) {
@@ -845,63 +691,68 @@
                 const urlObj = new URL(url);
                 return `${urlObj.origin}/favicon.ico`;
             } catch (e) {
-                console.error('Invalid URL for favicon:', url, e);
                 return 'https://example.com/favicon.ico';
             }
         }
 
         function moveCategory(id, direction) {
-            try {
-                const index = categories.findIndex(c => c.id === id);
-                if (index === -1) return;
-                if (direction === 'up' && index > 0) {
-                    [categories[index], categories[index - 1]] = [categories[index - 1], categories[index]];
-                } else if (direction === 'down' && index < categories.length - 1) {
-                    [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
-                } else {
-                    return;
-                }
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('MoveCategory Error:', e);
+            const index = categories.findIndex(c => c.id === id);
+            if (index === -1) return;
+            if (direction === 'up' && index > 0) {
+                [categories[index], categories[index - 1]] = [categories[index - 1], categories[index]];
+            } else if (direction === 'down' && index < categories.length - 1) {
+                [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
+            } else {
+                return;
             }
+            isDataSaved = false;
+            saveCategories();
+            renderCategories();
+            renderNav();
         }
 
         function moveSubcategory(catId, subcatId, direction) {
-            try {
-                const cat = categories.find(c => c.id === catId);
-                if (!cat) return;
-                const subcats = cat.subcategories;
-                const index = subcats.findIndex(s => s.id === subcatId);
-                if (index === -1) return;
-                if (direction === 'up' && index > 0) {
-                    [subcats[index], subcats[index - 1]] = [subcats[index - 1], subcats[index]];
-                } else if (direction === 'down' && index < subcats.length - 1) {
-                    [subcats[index], subcats[index + 1]] = [subcats[index + 1], subcats[index]];
-                } else {
-                    return;
-                }
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('MoveSubcategory Error:', e);
+            const cat = categories.find(c => c.id === catId);
+            if (!cat) return;
+            const subcats = cat.subcategories;
+            const index = subcats.findIndex(s => s.id === subcatId);
+            if (index === -1) return;
+            if (direction === 'up' && index > 0) {
+                [subcats[index], subcats[index - 1]] = [subcats[index - 1], subcats[index]];
+            } else if (direction === 'down' && index < subcats.length - 1) {
+                [subcats[index], subcats[index + 1]] = [subcats[index + 1], subcats[index]];
+            } else {
+                return;
             }
+            isDataSaved = false;
+            saveCategories();
+            renderCategories();
+            renderNav();
         }
 
         function moveUrl(id, direction) {
-            try {
-                for (const cat of categories) {
-                    const urlIndex = cat.urls.findIndex(u => u.id === id);
-                    if (urlIndex !== -1) {
-                        if (direction === 'up' && urlIndex > 0) {
-                            [cat.urls[urlIndex], cat.urls[urlIndex - 1]] = [cat.urls[urlIndex - 1], cat.urls[urlIndex]];
-                        } else if (direction === 'down' && urlIndex < cat.urls.length - 1) {
-                            [cat.urls[urlIndex], cat.urls[urlIndex + 1]] = [cat.urls[urlIndex + 1], cat.urls[urlIndex]];
+            for (const cat of categories) {
+                const urlIndex = cat.urls.findIndex(u => u.id === id);
+                if (urlIndex !== -1) {
+                    if (direction === 'up' && urlIndex > 0) {
+                        [cat.urls[urlIndex], cat.urls[urlIndex - 1]] = [cat.urls[urlIndex - 1], cat.urls[urlIndex]];
+                    } else if (direction === 'down' && urlIndex < cat.urls.length - 1) {
+                        [cat.urls[urlIndex], cat.urls[urlIndex + 1]] = [cat.urls[urlIndex + 1], cat.urls[urlIndex]];
+                    } else {
+                        return;
+                    }
+                    isDataSaved = false;
+                    saveCategories();
+                    renderCategories();
+                    return;
+                }
+                for (const subcat of cat.subcategories) {
+                    const subUrlIndex = subcat.urls.findIndex(u => u.id === id);
+                    if (subUrlIndex !== -1) {
+                        if (direction === 'up' && subUrlIndex > 0) {
+                            [subcat.urls[subUrlIndex], subcat.urls[subUrlIndex - 1]] = [subcat.urls[subUrlIndex - 1], subcat.urls[subUrlIndex]];
+                        } else if (direction === 'down' && subUrlIndex < subcat.urls.length - 1) {
+                            [subcat.urls[subUrlIndex], subcat.urls[subUrlIndex + 1]] = [subcat.urls[subUrlIndex + 1], subcat.urls[subUrlIndex]];
                         } else {
                             return;
                         }
@@ -910,25 +761,7 @@
                         renderCategories();
                         return;
                     }
-                    for (const subcat of cat.subcategories) {
-                        const subUrlIndex = subcat.urls.findIndex(u => u.id === id);
-                        if (subUrlIndex !== -1) {
-                            if (direction === 'up' && subUrlIndex > 0) {
-                                [subcat.urls[subUrlIndex], subcat.urls[subUrlIndex - 1]] = [subcat.urls[subUrlIndex - 1], subcat.urls[subUrlIndex]];
-                            } else if (direction === 'down' && subUrlIndex < subcat.urls.length - 1) {
-                                [subcat.urls[subUrlIndex], subcat.urls[subUrlIndex + 1]] = [subcat.urls[subUrlIndex + 1], subcat.urls[subUrlIndex]];
-                            } else {
-                                return;
-                            }
-                            isDataSaved = false;
-                            saveCategories();
-                            renderCategories();
-                            return;
-                        }
-                    }
                 }
-            } catch (e) {
-                console.error('MoveUrl Error:', e);
             }
         }
 
@@ -966,11 +799,9 @@
                 </div>
             `;
             document.body.appendChild(modal);
-
             const confirmBtn = modal.querySelector('.modal-confirm');
             const cancelBtn = modal.querySelector('.modal-cancel');
             const select = modal.querySelector('#modal-select');
-
             confirmBtn.addEventListener('click', () => {
                 const selectedValue = select.value;
                 if (!selectedValue) {
@@ -981,7 +812,6 @@
                 onConfirm({ id: targetId, type: targetType, parentId });
                 document.body.removeChild(modal);
             });
-
             cancelBtn.addEventListener('click', () => {
                 if (onCancel) onCancel();
                 document.body.removeChild(modal);
@@ -989,161 +819,180 @@
         }
 
         function migrateUrl(urlId) {
-            try {
-                let url, sourceCat, sourceSubcat;
-                for (const cat of categories) {
-                    const urlIndex = cat.urls.findIndex(u => u.id === urlId);
-                    if (urlIndex !== -1) {
-                        url = cat.urls[urlIndex];
+            let url, sourceCat, sourceSubcat;
+            for (const cat of categories) {
+                const urlIndex = cat.urls.findIndex(u => u.id === urlId);
+                if (urlIndex !== -1) {
+                    url = cat.urls[urlIndex];
+                    sourceCat = cat;
+                    sourceSubcat = null;
+                    break;
+                }
+                for (const subcat of cat.subcategories) {
+                    const subUrlIndex = subcat.urls.findIndex(u => u.id === urlId);
+                    if (subUrlIndex !== -1) {
+                        url = subcat.urls[subUrlIndex];
                         sourceCat = cat;
-                        sourceSubcat = null;
+                        sourceSubcat = subcat;
                         break;
                     }
-                    for (const subcat of cat.subcategories) {
-                        const subUrlIndex = subcat.urls.findIndex(u => u.id === urlId);
-                        if (subUrlIndex !== -1) {
-                            url = subcat.urls[subUrlIndex];
-                            sourceCat = cat;
-                            sourceSubcat = subcat;
-                            break;
-                        }
-                    }
-                    if (url) break;
                 }
-
-                if (!url) {
-                    alert('未找到该网址！');
-                    return;
-                }
-
-                const options = getMigrationOptions(sourceCat.id);
-                if (options.length === 0) {
-                    alert('没有其他分类可供迁移！');
-                    return;
-                }
-
-                showModal(
-                    `将网址 "${url.name}" 迁移到以下分类：`,
-                    options,
-                    ({ id: targetId, type, parentId }) => {
-                        if (type === 'category') {
-                            const targetCat = categories.find(c => c.id === targetId);
-                            if (sourceSubcat) {
-                                sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
-                            } else {
-                                sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
-                            }
-                            targetCat.urls.push(url);
-                            alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
-                        } else if (type === 'subcategory') {
-                            const targetCat = categories.find(c => c.id === parentId);
-                            const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
-                            if (sourceSubcat) {
-                                sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
-                            } else {
-                                sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
-                            }
-                            targetSubcat.urls.push(url);
-                            alert(`网址 "${url.name}" 已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"！`);
-                        }
-                        isDataSaved = false;
-                        saveCategories();
-                        renderCategories();
-                    },
-                    () => {}
-                );
-            } catch (e) {
-                console.error('MigrateUrl Error:', e);
-                alert('迁移失败，请检查控制台！');
+                if (url) break;
             }
+            if (!url) {
+                alert('未找到该网址！');
+                return;
+            }
+            const options = getMigrationOptions(sourceCat.id);
+            if (options.length === 0) {
+                alert('没有其他分类可供迁移！');
+                return;
+            }
+            showModal(
+                `将网址 "${url.name}" 迁移到以下分类：`,
+                options,
+                ({ id: targetId, type, parentId }) => {
+                    if (type === 'category') {
+                        const targetCat = categories.find(c => c.id === targetId);
+                        if (sourceSubcat) {
+                            sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
+                        } else {
+                            sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                        }
+                        targetCat.urls.push(url);
+                        alert(`网址 "${url.name}" 已迁移到分类 "${targetCat.name}"！`);
+                    } else if (type === 'subcategory') {
+                        const targetCat = categories.find(c => c.id === parentId);
+                        const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
+                        if (sourceSubcat) {
+                            sourceSubcat.urls = sourceSubcat.urls.filter(u => u.id !== urlId);
+                        } else {
+                            sourceCat.urls = sourceCat.urls.filter(u => u.id !== urlId);
+                        }
+                        targetSubcat.urls.push(url);
+                        alert(`网址 "${url.name}" 已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"！`);
+                    }
+                    isDataSaved = false;
+                    saveCategories();
+                    renderCategories();
+                },
+                () => {}
+            );
         }
 
         function renderNav() {
-            try {
-                const nav = document.getElementById('nav');
-                if (!nav) {
-                    console.error('Nav element not found');
-                    return;
-                }
-                nav.innerHTML = '';
-                categories.forEach(cat => {
-                    const li = document.createElement('li');
-                    li.textContent = cat.name;
-                    li.dataset.catId = cat.id;
-                    li.addEventListener('click', () => {
-                        const target = document.getElementById(cat.id);
-                        if (target) {
-                            target.scrollIntoView({ behavior: 'smooth' });
-                        } else {
-                            console.warn(`Category element with ID ${cat.id} not found`);
-                        }
-                    });
-                    nav.appendChild(li);
-
-                    if (cat.subcategories.length) {
-                        const subUl = document.createElement('ul');
-                        cat.subcategories.forEach(subcat => {
-                            const subLi = document.createElement('li');
-                            subLi.textContent = subcat.name;
-                            subLi.dataset.subcatId = subcat.id;
-                            subLi.addEventListener('click', () => {
-                                const target = document.getElementById(subcat.id);
-                                if (target) {
-                                    target.scrollIntoView({ behavior: 'smooth' });
-                                } else {
-                                    console.warn(`Subcategory element with ID ${subcat.id} not found`);
-                                }
-                            });
-                            subUl.appendChild(subLi);
-                        });
-                        nav.appendChild(subUl);
+            const nav = document.getElementById('nav');
+            nav.innerHTML = '';
+            categories.forEach(cat => {
+                const li = document.createElement('li');
+                li.textContent = cat.name;
+                li.dataset.catId = cat.id;
+                li.addEventListener('click', () => {
+                    const target = document.getElementById(cat.id);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
                     }
                 });
-            } catch (e) {
-                console.error('RenderNav Error:', e);
-            }
+                nav.appendChild(li);
+                if (cat.subcategories.length) {
+                    const subUl = document.createElement('ul');
+                    cat.subcategories.forEach(subcat => {
+                        const subLi = document.createElement('li');
+                        subLi.textContent = subcat.name;
+                        subLi.dataset.subcatId = subcat.id;
+                        subLi.addEventListener('click', () => {
+                            const target = document.getElementById(subcat.id);
+                            if (target) {
+                                target.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });
+                        subUl.appendChild(subLi);
+                    });
+                    nav.appendChild(subUl);
+                }
+            });
         }
 
         function renderCategories() {
-            try {
-                const container = document.getElementById('categories');
-                if (!container) {
-                    console.error('Categories container not found');
-                    return;
-                }
-                container.innerHTML = '';
-                categories.forEach((cat, catIndex) => {
-                    const catDiv = document.createElement('div');
-                    catDiv.className = 'category';
-                    catDiv.id = cat.id;
-                    catDiv.innerHTML = `
-                        <h2>${isEditMode && cat.isEditing ? `<input type="text" value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">` : cat.name}</h2>
-                        <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditCategory('${cat.id}')">${cat.isEditing ? '保存' : '修改'}</button>
-                        <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${cat.isEditing ? '' : 'disabled'}" onclick="deleteCategory('${cat.id}')">删除</button>
-                        <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'up')" ${catIndex === 0 ? 'disabled' : ''}>上移</button>
-                        <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'down')" ${catIndex === categories.length - 1 ? 'disabled' : ''}>下移</button>
-                        <div class="urls" id="urls-${cat.id}"></div>
-                        <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addUrl('${cat.id}')">添加网址</button>
-                        <div id="subcats-${cat.id}"></div>
-                        <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubcategory('${cat.id}')">添加子分类</button>
+            const container = document.getElementById('categories');
+            const activeElementId = document.activeElement?.id;
+            container.innerHTML = '';
+            categories.forEach((cat, catIndex) => {
+                const catDiv = document.createElement('div');
+                catDiv.className = 'category';
+                catDiv.id = cat.id;
+                catDiv.innerHTML = `
+                    <h2>${isEditMode && cat.isEditing ? `<input value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称" autocapitalize="off" autocorrect="off">` : cat.name}</h2>
+                    <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditCategory('${cat.id}')">${cat.isEditing ? '保存' : '修改'}</button>
+                    <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${cat.isEditing ? '' : 'disabled'}" onclick="deleteCategory('${cat.id}')">删除</button>
+                    <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'up')" ${catIndex === 0 ? 'disabled' : ''}>上移</button>
+                    <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'down')" ${catIndex === categories.length - 1 ? 'disabled' : ''}>下移</button>
+                    <div class="urls" id="urls-${cat.id}"></div>
+                    <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addUrl('${cat.id}')">添加网址</button>
+                    <div id="subcats-${cat.id}"></div>
+                    <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubcategory('${cat.id}')">添加子分类</button>
+                `;
+                container.appendChild(catDiv);
+                const urlsDiv = catDiv.querySelector(`#urls-${cat.id}`);
+                cat.urls.forEach((url, urlIndex) => {
+                    const urlDiv = document.createElement('div');
+                    urlDiv.className = 'url';
+                    urlDiv.innerHTML = `
+                        ${isEditMode && url.isEditing ? `
+                            <div class="url-main">
+                                <div>
+                                    <input value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocapitalize="off" autocorrect="off">
+                                    <input value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocapitalize="off" autocorrect="off">
+                                    <textarea id="url-desc-${url.id}" placeholder="描述" autocapitalize="off" autocorrect="off">${url.desc}</textarea>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="url-main">
+                                <a href="${url.url}" target="_blank" class="url-icon-link">
+                                    <img src="${url.icon}" alt="favicon" loading="lazy" onerror="this.src='https://example.com/favicon.ico'">
+                                </a>
+                                <div class="url-content">
+                                    <div class="url-name">${url.name}</div>
+                                    <div class="url-desc">${url.desc}</div>
+                                </div>
+                            </div>
+                        `}
+                        <div class="url-actions ${isEditMode ? '' : 'hidden'}">
+                            <button class="edit-btn" onclick="toggleEditUrl('${url.id}')">${url.isEditing ? '保存' : '修改'}</button>
+                            <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
+                            <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
+                            <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === cat.urls.length - 1 ? 'disabled' : ''}>下移</button>
+                            <button class="migrate-btn" onclick="migrateUrl('${url.id}')">迁移</button>
+                        </div>
                     `;
-                    container.appendChild(catDiv);
-
-                    const urlsDiv = catDiv.querySelector(`#urls-${cat.id}`);
-                    if (!urlsDiv) {
-                        console.warn(`Urls container for category ${cat.id} not found`);
-                        return;
-                    }
-                    cat.urls.forEach((url, urlIndex) => {
+                    urlsDiv.appendChild(urlDiv);
+                });
+                const subcatsDiv = catDiv.querySelector(`#subcats-${cat.id}`);
+                cat.subcategories.forEach((subcat, subcatIndex) => {
+                    const subcatDiv = document.createElement('div');
+                    subcatDiv.className = 'subcategory';
+                    subcatDiv.id = subcat.id;
+                    subcatDiv.innerHTML = `
+                        <h4>${isEditMode && subcat.isEditing ? `<input value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称" autocapitalize="off" autocorrect="off">` : subcat.name}</h4>
+                        <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
+                        <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
+                        <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
+                        <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${subcatIndex === cat.subcategories.length - 1 ? 'disabled' : ''}>下移</button>
+                        <div class="urls" id="suburls-${subcat.id}"></div>
+                        <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubUrl('${subcat.id}')">添加网址</button>
+                    `;
+                    subcatsDiv.appendChild(subcatDiv);
+                    const subUrlsDiv = subcatDiv.querySelector(`#suburls-${subcat.id}`);
+                    subcat.urls.forEach((url, urlIndex) => {
                         const urlDiv = document.createElement('div');
                         urlDiv.className = 'url';
                         urlDiv.innerHTML = `
                             ${isEditMode && url.isEditing ? `
                                 <div class="url-main">
                                     <div>
-                                        <input type="text" value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-                                        <input type="text" value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-                                        <textarea id="url-desc-${url.id}" placeholder="描述" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">${url.desc}</textarea>
+                                        <input value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocapitalize="off" autocorrect="off">
+                                        <input value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocapitalize="off" autocorrect="off">
+                                        <textarea id="url-desc-${url.id}" placeholder="描述" autocapitalize="off" autocorrect="off">${url.desc}</textarea>
                                     </div>
                                 </div>
                             ` : `
@@ -1161,164 +1010,93 @@
                                 <button class="edit-btn" onclick="toggleEditUrl('${url.id}')">${url.isEditing ? '保存' : '修改'}</button>
                                 <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
                                 <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
-                                <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === cat.urls.length - 1 ? 'disabled' : ''}>下移</button>
+                                <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === subcat.urls.length - 1 ? 'disabled' : ''}>下移</button>
                                 <button class="migrate-btn" onclick="migrateUrl('${url.id}')">迁移</button>
                             </div>
                         `;
-                        urlsDiv.appendChild(urlDiv);
+                        subUrlsDiv.appendChild(urlDiv);
                     });
-
-                    const subcatsDiv = catDiv.querySelector(`#subcats-${cat.id}`);
-                    if (!subcatsDiv) {
-                        console.warn(`Subcategories container for category ${cat.id} not found`);
-                        return;
-                    }
-                    cat.subcategories.forEach((subcat, subcatIndex) => {
-                        const subcatDiv = document.createElement('div');
-                        subcatDiv.className = 'subcategory';
-                        subcatDiv.id = subcat.id;
-                        subcatDiv.innerHTML = `
-                            <h4>${isEditMode && subcat.isEditing ? `<input type="text" value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">` : subcat.name}</h4>
-                            <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
-                            <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
-                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
-                            <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'down')" ${subcatIndex === cat.subcategories.length - 1 ? 'disabled' : ''}>下移</button>
-                            <div class="urls" id="suburls-${subcat.id}"></div>
-                            <button class="add-btn ${isEditMode ? '' : 'hidden'}" onclick="addSubUrl('${subcat.id}')">添加网址</button>
-                        `;
-                        subcatsDiv.appendChild(subcatDiv);
-
-                        const subUrlsDiv = subcatDiv.querySelector(`#suburls-${subcat.id}`);
-                        if (!subUrlsDiv) {
-                            console.warn(`Suburls container for subcategory ${subcat.id} not found`);
-                            return;
-                        }
-                        subcat.urls.forEach((url, urlIndex) => {
-                            const urlDiv = document.createElement('div');
-                            urlDiv.className = 'url';
-                            urlDiv.innerHTML = `
-                                ${isEditMode && url.isEditing ? `
-                                    <div class="url-main">
-                                        <div>
-                                            <input type="text" value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-                                            <input type="text" value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-                                            <textarea id="url-desc-${url.id}" placeholder="描述" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">${url.desc}</textarea>
-                                        </div>
-                                    </div>
-                                ` : `
-                                    <div class="url-main">
-                                        <a href="${url.url}" target="_blank" class="url-icon-link">
-                                            <img src="${url.icon}" alt="favicon" loading="lazy" onerror="this.src='https://example.com/favicon.ico'">
-                                        </a>
-                                        <div class="url-content">
-                                            <div class="url-name">${url.name}</div>
-                                            <div class="url-desc">${url.desc}</div>
-                                        </div>
-                                    </div>
-                                `}
-                                <div class="url-actions ${isEditMode ? '' : 'hidden'}">
-                                    <button class="edit-btn" onclick="toggleEditUrl('${url.id}')">${url.isEditing ? '保存' : '修改'}</button>
-                                    <button class="delete-btn ${url.isEditing ? '' : 'disabled'}" onclick="deleteUrl('${url.id}')">删除</button>
-                                    <button class="move-btn" onclick="moveUrl('${url.id}', 'up')" ${urlIndex === 0 ? 'disabled' : ''}>上移</button>
-                                    <button class="move-btn" onclick="moveUrl('${url.id}', 'down')" ${urlIndex === subcat.urls.length - 1 ? 'disabled' : ''}>下移</button>
-                                    <button class="migrate-btn" onclick="migrateUrl('${url.id}')">迁移</button>
-                                </div>
-                            `;
-                            subUrlsDiv.appendChild(urlDiv);
-                        });
-                    });
-
-                    if (isEditMode && cat.isEditing) {
-                        const nameInput = catDiv.querySelector(`#cat-name-${cat.id}`);
-                        if (nameInput) {
-                            const originalName = cat.name;
-                            nameInput.oninput = e => {
-                                cat.name = e.target.value;
-                                if (cat.name !== originalName) isDataSaved = false;
-                            };
-                        }
-                    }
                 });
-
-                const globalAddBtn = document.querySelector('.content > .add-btn');
-                if (globalAddBtn) globalAddBtn.className = `add-btn ${isEditMode ? '' : 'hidden'}`;
-                const saveBtn = document.querySelector('.save-btn');
-                if (saveBtn) saveBtn.className = `save-btn ${isEditMode ? '' : 'hidden'}`;
-                const restoreBtn = document.querySelector('.restore-btn');
-                if (restoreBtn) restoreBtn.className = `restore-btn ${isEditMode ? '' : 'hidden'}`;
-                const updateInput = document.getElementById('update-file-input');
-                if (updateInput) updateInput.className = `${isEditMode ? '' : 'hidden'}`;
-                const updateBtn = document.querySelector('.update-btn');
-                if (updateBtn) updateBtn.className = `update-btn ${isEditMode ? '' : 'hidden'}`;
-
-                // Apply mobile keyboard fix after rendering
-                fixMobileKeyboard();
-            } catch (e) {
-                console.error('RenderCategories Error:', e);
+                if (isEditMode && cat.isEditing) {
+                    const nameInput = catDiv.querySelector(`#cat-name-${cat.id}`);
+                    if (nameInput) {
+                        nameInput.addEventListener('input', debounce(() => {
+                            cat.name = nameInput.value;
+                            isDataSaved = false;
+                            saveCategories();
+                            renderNav();
+                        }, 300));
+                    }
+                }
+            });
+            const globalAddBtn = document.querySelector('.content > .add-btn');
+            if (globalAddBtn) globalAddBtn.className = `add-btn ${isEditMode ? '' : 'hidden'}`;
+            const saveBtn = document.querySelector('.save-btn');
+            if (saveBtn) saveBtn.className = `save-btn ${isEditMode ? '' : 'hidden'}`;
+            const restoreBtn = document.querySelector('.restore-btn');
+            if (restoreBtn) restoreBtn.className = `restore-btn ${isEditMode ? '' : 'hidden'}`;
+            const updateInput = document.getElementById('update-file-input');
+            if (updateInput) updateInput.className = `${isEditMode ? '' : 'hidden'}`;
+            const updateBtn = document.querySelector('.update-btn');
+            if (updateBtn) updateBtn.className = `update-btn ${isEditMode ? '' : 'hidden'}`;
+            fixMobileKeyboard();
+            if (activeElementId) {
+                const activeElement = document.getElementById(activeElementId);
+                if (activeElement) {
+                    activeElement.focus();
+                    const value = activeElement.value;
+                    activeElement.value = '';
+                    activeElement.value = value;
+                }
             }
         }
 
         function toggleMode() {
-            try {
-                if (isEditMode) {
-                    let hasEditing = false;
-                    for (const cat of categories) {
-                        if (cat.isEditing) {
-                            hasEditing = true;
-                            break;
-                        }
-                        if (cat.urls.some(url => url.isEditing)) {
-                            hasEditing = true;
-                            break;
-                        }
-                        if (cat.subcategories.some(subcat => subcat.isEditing || subcat.urls.some(url => url.isEditing))) {
-                            hasEditing = true;
-                            break;
-                        }
+            if (isEditMode) {
+                let hasEditing = false;
+                for (const cat of categories) {
+                    if (cat.isEditing) {
+                        hasEditing = true;
+                        break;
                     }
-                    if (hasEditing) {
-                        alert('退出失败，请先完成编辑！');
-                        return;
+                    if (cat.urls.some(url => url.isEditing)) {
+                        hasEditing = true;
+                        break;
                     }
-                    // Allow exit without saving if no meaningful changes
-                    isEditMode = false;
-                    // Reset isEditing states
-                    categories.forEach(cat => {
-                        cat.isEditing = false;
-                        cat.urls.forEach(url => url.isEditing = false);
-                        cat.subcategories.forEach(subcat => {
-                            subcat.isEditing = false;
-                            subcat.urls.forEach(url => url.isEditing = false);
-                        });
-                    });
-                    saveCategories();
-                } else {
-                    isEditMode = true;
+                    if (cat.subcategories.some(subcat => subcat.isEditing || subcat.urls.some(url => url.isEditing))) {
+                        hasEditing = true;
+                        break;
+                    }
                 }
-                const toggleBtn = document.getElementById('toggle-mode');
-                if (toggleBtn) toggleBtn.textContent = isEditMode ? '退出' : '进入';
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('ToggleMode Error:', e);
+                if (hasEditing) {
+                    alert('退出失败，请先完成编辑！');
+                    return;
+                }
+                isEditMode = false;
+                categories.forEach(cat => {
+                    cat.isEditing = false;
+                    cat.urls.forEach(url => url.isEditing = false);
+                    cat.subcategories.forEach(subcat => {
+                        subcat.isEditing = false;
+                        subcat.urls.forEach(url => url.isEditing = false);
+                    });
+                });
+                saveCategories();
+            } else {
+                isEditMode = true;
             }
+            const toggleBtn = document.getElementById('toggle-mode');
+            if (toggleBtn) toggleBtn.textContent = isEditMode ? '退出' : '进入';
+            renderCategories();
+            renderNav();
         }
 
         function toggleSidebar() {
-            try {
-                const sidebar = document.getElementById('sidebar');
-                const toggleBtn = document.querySelector('.toggle-sidebar');
-                if (!sidebar || !toggleBtn) {
-                    console.error('Sidebar or toggle button not found');
-                    return;
-                }
-                isSidebarExpanded = !isSidebarExpanded;
-                sidebar.classList.toggle('expanded', isSidebarExpanded);
-                toggleBtn.textContent = isSidebarExpanded ? '▼' : '▲';
-                renderNav();
-            } catch (e) {
-                console.error('ToggleSidebar Error:', e);
-            }
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            sidebar.classList.toggle('expanded');
+            toggleBtn.textContent = sidebar.classList.contains('expanded') ? '▼' : '▲';
+            renderNav();
         }
 
         function generateId(prefix) {
@@ -1326,295 +1104,233 @@
         }
 
         function addCategory() {
-            try {
-                categories.push({
-                    id: generateId('cat'),
-                    name: '新分类',
-                    isEditing: false,
-                    urls: [],
-                    subcategories: []
-                });
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('AddCategory Error:', e);
-                alert('添加分类失败，请检查控制台！');
-            }
+            categories.push({
+                id: generateId('cat'),
+                name: '新分类',
+                isEditing: false,
+                urls: [],
+                subcategories: []
+            });
+            isDataSaved = false;
+            saveCategories();
+            renderCategories();
+            renderNav();
         }
 
         function toggleEditCategory(id) {
-            try {
-                const cat = categories.find(c => c.id === id);
-                if (!cat) return;
-                if (cat.isEditing) {
-                    const nameInput = document.getElementById(`cat-name-${id}`);
-                    if (nameInput) {
-                        const newName = nameInput.value;
-                        if (newName !== cat.originalName) {
-                            cat.name = newName;
-                            isDataSaved = false;
-                        }
-                    }
-                    delete cat.originalName;
-                    cat.isEditing = false;
-                } else {
-                    cat.originalName = cat.name;
-                    cat.isEditing = true;
+            const cat = categories.find(c => c.id === id);
+            if (!cat) return;
+            if (cat.isEditing) {
+                const nameInput = document.getElementById(`cat-name-${id}`);
+                if (nameInput && nameInput.value !== cat.name) {
+                    cat.name = nameInput.value;
+                    isDataSaved = false;
                 }
-                saveCategories();
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('ToggleEditCategory Error:', e);
+                cat.isEditing = false;
+            } else {
+                cat.isEditing = true;
             }
+            saveCategories();
+            renderCategories();
+            renderNav();
         }
 
         function deleteCategory(id) {
-            try {
-                const cat = categories.find(c => c.id === id);
-                if (!cat || !cat.isEditing) return;
-
-                const hasUrls = cat.urls.length > 0;
-                const hasSubcategories = cat.subcategories.length > 0;
-                const subcatUrls = cat.subcategories.reduce((total, subcat) => total + subcat.urls.length, 0);
-
-                if (hasUrls || hasSubcategories || subcatUrls > 0) {
-                    const options = getMigrationOptions(cat.id);
-                    if (options.length === 0) {
-                        alert('没有其他分类可供迁移，无法删除！请先创建新分类或清空内容。');
-                        return;
-                    }
-
-                    showModal(
-                        `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，请选择迁移目标：`,
-                        options,
-                        ({ id: targetId, type, parentId }) => {
-                            if (type === 'category') {
-                                const targetCat = categories.find(c => c.id === targetId);
-                                targetCat.urls.push(...cat.urls);
-                                targetCat.subcategories.push(...cat.subcategories);
-                                alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}" 并删除！`);
-                            } else if (type === 'subcategory') {
-                                const targetCat = categories.find(c => c.id === parentId);
-                                const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
-                                targetSubcat.urls.push(...cat.urls);
-                                cat.subcategories.forEach(subcat => {
-                                    targetSubcat.urls.push(...subcat.urls);
-                                });
-                                alert(`分类 "${cat.name}" 的所有网址已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"，其子分类结构已丢弃！`);
-                            }
-                            categories = categories.filter(c => c.id !== id);
-                            isDataSaved = false;
-                            saveCategories();
-                            renderCategories();
-                            renderNav();
-                        },
-                        () => {
-                            alert('必须迁移内容后才能删除分类！');
+            const cat = categories.find(c => c.id === id);
+            if (!cat || !cat.isEditing) return;
+            const hasUrls = cat.urls.length > 0;
+            const hasSubcategories = cat.subcategories.length > 0;
+            const subcatUrls = cat.subcategories.reduce((total, subcat) => total + subcat.urls.length, 0);
+            if (hasUrls || hasSubcategories || subcatUrls > 0) {
+                const options = getMigrationOptions(cat.id);
+                if (options.length === 0) {
+                    alert('没有其他分类可供迁移，无法删除！请先创建新分类或清空内容。');
+                    return;
+                }
+                showModal(
+                    `分类 "${cat.name}" 包含 ${cat.urls.length + subcatUrls} 个网址和 ${cat.subcategories.length} 个子分类，请选择迁移目标：`,
+                    options,
+                    ({ id: targetId, type, parentId }) => {
+                        if (type === 'category') {
+                            const targetCat = categories.find(c => c.id === targetId);
+                            targetCat.urls.push(...cat.urls);
+                            targetCat.subcategories.push(...cat.subcategories);
+                            alert(`分类 "${cat.name}" 的内容已迁移到 "${targetCat.name}" 并删除！`);
+                        } else if (type === 'subcategory') {
+                            const targetCat = categories.find(c => c.id === parentId);
+                            const targetSubcat = targetCat.subcategories.find(s => s.id === targetId);
+                            targetSubcat.urls.push(...cat.urls);
+                            cat.subcategories.forEach(subcat => {
+                                targetSubcat.urls.push(...subcat.urls);
+                            });
+                            alert(`分类 "${cat.name}" 的所有网址已迁移到子分类 "${targetCat.name} > ${targetSubcat.name}"，其子分类结构已丢弃！`);
                         }
-                    );
-                } else {
-                    if (confirm(`确定要删除分类 "${cat.name}" 吗？`)) {
                         categories = categories.filter(c => c.id !== id);
                         isDataSaved = false;
                         saveCategories();
                         renderCategories();
                         renderNav();
+                    },
+                    () => {
+                        alert('必须迁移内容后才能删除分类！');
                     }
+                );
+            } else {
+                if (confirm(`确定要删除分类 "${cat.name}" 吗？`)) {
+                    categories = categories.filter(c => c.id !== id);
+                    isDataSaved = false;
+                    saveCategories();
+                    renderCategories();
+                    renderNav();
                 }
-            } catch (e) {
-                console.error('DeleteCategory Error:', e);
-                alert('删除失败，请检查控制台！');
             }
         }
 
         function addUrl(catId) {
-            try {
-                const cat = categories.find(c => c.id === catId);
-                if (!cat) return;
-                const newUrl = {
-                    id: generateId('url'),
-                    name: '新网站',
-                    url: 'https://example.com',
-                    desc: '网站描述',
-                    icon: getFaviconUrl('https://example.com'),
-                    isEditing: true
-                };
-                cat.urls.push(newUrl);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('AddUrl Error:', e);
-            }
+            const cat = categories.find(c => c.id === catId);
+            if (!cat) return;
+            const newUrl = {
+                id: generateId('url'),
+                name: '新网站',
+                url: 'https://example.com',
+                desc: '网站描述',
+                icon: getFaviconUrl('https://example.com'),
+                isEditing: true
+            };
+            cat.urls.push(newUrl);
+            isDataSaved = false;
+            saveCategories();
+            renderCategories();
         }
 
         function toggleEditUrl(id) {
-            try {
-                let url;
-                for (const cat of categories) {
-                    url = cat.urls.find(u => u.id === id);
-                    if (url) break;
-                    for (const subcat of cat.subcategories) {
-                        url = subcat.urls.find(u => u.id === id);
-                        if (url) break;
-                    }
+            let url;
+            for (const cat of categories) {
+                url = cat.urls.find(u => u.id === id);
+                if (url) break;
+                for (const subcat of cat.subcategories) {
+                    url = subcat.urls.find(u => u.id === id);
                     if (url) break;
                 }
-                if (!url) return;
-                if (url.isEditing) {
-                    const nameInput = document.getElementById(`url-name-${id}`);
-                    const urlInput = document.getElementById(`url-url-${id}`);
-                    const descInput = document.getElementById(`url-desc-${id}`);
-                    if (nameInput && urlInput && descInput) {
-                        const newName = nameInput.value;
-                        const newUrl = urlInput.value;
-                        const newDesc = descInput.value;
-                        if (newName !== url.originalName || newUrl !== url.originalUrl || newDesc !== url.originalDesc) {
-                            url.name = newName;
-                            url.url = newUrl;
-                            url.desc = newDesc;
-                            url.icon = getFaviconUrl(newUrl);
-                            isDataSaved = false;
-                        }
-                    }
-                    delete url.originalName;
-                    delete url.originalUrl;
-                    delete url.originalDesc;
-                    url.isEditing = false;
-                } else {
-                    url.originalName = url.name;
-                    url.originalUrl = url.url;
-                    url.originalDesc = url.desc;
-                    url.isEditing = true;
+                if (url) break;
+            }
+            if (!url) return;
+            if (url.isEditing) {
+                const nameInput = document.getElementById(`url-name-${id}`);
+                const urlInput = document.getElementById(`url-url-${id}`);
+                const descInput = document.getElementById(`url-desc-${id}`);
+                if (nameInput && urlInput && descInput) {
+                    url.name = nameInput.value;
+                    url.url = urlInput.value;
+                    url.desc = descInput.value;
+                    url.icon = getFaviconUrl(url.url);
+                    isDataSaved = false;
                 }
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('ToggleEditUrl Error:', e);
+                url.isEditing = false;
+            } else {
+                url.isEditing = true;
+            }
+            saveCategories();
+            renderCategories();
+            if (url.isEditing) {
+                const nameInput = document.getElementById(`url-name-${id}`);
+                if (nameInput) nameInput.focus();
             }
         }
 
         function deleteUrl(id) {
-            try {
-                for (const cat of categories) {
-                    const urlIndex = cat.urls.findIndex(u => u.id === id);
-                    if (urlIndex !== -1 && cat.urls[urlIndex].isEditing) {
-                        cat.urls.splice(urlIndex, 1);
+            for (const cat of categories) {
+                const urlIndex = cat.urls.findIndex(u => u.id === id);
+                if (urlIndex !== -1 && cat.urls[urlIndex].isEditing) {
+                    cat.urls.splice(urlIndex, 1);
+                    isDataSaved = false;
+                    saveCategories();
+                    renderCategories();
+                    return;
+                }
+                for (const subcat of cat.subcategories) {
+                    const subUrlIndex = subcat.urls.findIndex(u => u.id === id);
+                    if (subUrlIndex !== -1 && subcat.urls[subUrlIndex].isEditing) {
+                        subcat.urls.splice(subUrlIndex, 1);
                         isDataSaved = false;
                         saveCategories();
                         renderCategories();
                         return;
                     }
-                    for (const subcat of cat.subcategories) {
-                        const subUrlIndex = subcat.urls.findIndex(u => u.id === id);
-                        if (subUrlIndex !== -1 && subcat.urls[subUrlIndex].isEditing) {
-                            subcat.urls.splice(subUrlIndex, 1);
-                            isDataSaved = false;
-                            saveCategories();
-                            renderCategories();
-                            return;
-                        }
-                    }
                 }
-            } catch (e) {
-                console.error('DeleteUrl Error:', e);
             }
         }
 
         function addSubcategory(catId) {
-            try {
-                const cat = categories.find(c => c.id === catId);
-                if (!cat) return;
-                cat.subcategories.push({
-                    id: generateId('subcat'),
-                    name: '新子分类',
-                    isEditing: false,
-                    urls: []
-                });
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('AddSubcategory Error:', e);
-            }
+            const cat = categories.find(c => c.id === catId);
+            if (!cat) return;
+            cat.subcategories.push({
+                id: generateId('subcat'),
+                name: '新子分类',
+                isEditing: false,
+                urls: []
+            });
+            isDataSaved = false;
+            saveCategories();
+            renderCategories();
+            renderNav();
         }
 
         function toggleEditSubcategory(id) {
-            try {
-                let subcat;
-                for (const cat of categories) {
-                    subcat = cat.subcategories.find(s => s.id === id);
-                    if (subcat) break;
-                }
-                if (!subcat) return;
-                if (subcat.isEditing) {
-                    const nameInput = document.getElementById(`subcat-name-${id}`);
-                    if (nameInput) {
-                        const newName = nameInput.value;
-                        if (newName !== subcat.originalName) {
-                            subcat.name = newName;
-                            isDataSaved = false;
-                        }
-                    }
-                    delete subcat.originalName;
-                    subcat.isEditing = false;
-                } else {
-                    subcat.originalName = subcat.name;
-                    subcat.isEditing = true;
-                }
-                saveCategories();
-                renderCategories();
-                renderNav();
-            } catch (e) {
-                console.error('ToggleEditSubcategory Error:', e);
+            let subcat;
+            for (const cat of categories) {
+                subcat = cat.subcategories.find(s => s.id === id);
+                if (subcat) break;
             }
+            if (!subcat) return;
+            if (subcat.isEditing) {
+                const nameInput = document.getElementById(`subcat-name-${id}`);
+                if (nameInput && nameInput.value !== subcat.name) {
+                    subcat.name = nameInput.value;
+                    isDataSaved = false;
+                }
+                subcat.isEditing = false;
+            } else {
+                subcat.isEditing = true;
+            }
+            saveCategories();
+            renderCategories();
+            renderNav();
         }
 
         function deleteSubcategory(id) {
-            try {
-                for (const cat of categories) {
-                    const subcatIndex = cat.subcategories.findIndex(s => s.id === id);
-                    if (subcatIndex !== -1 && cat.subcategories[subcatIndex].isEditing) {
-                        cat.subcategories.splice(subcatIndex, 1);
-                        isDataSaved = false;
-                        saveCategories();
-                        renderCategories();
-                        renderNav();
-                        return;
-                    }
+            for (const cat of categories) {
+                const subcatIndex = cat.subcategories.findIndex(s => s.id === id);
+                if (subcatIndex !== -1 && cat.subcategories[subcatIndex].isEditing) {
+                    cat.subcategories.splice(subcatIndex, 1);
+                    isDataSaved = false;
+                    saveCategories();
+                    renderCategories();
+                    renderNav();
+                    return;
                 }
-            } catch (e) {
-                console.error('DeleteSubcategory Error:', e);
             }
         }
 
         function addSubUrl(subcatId) {
-            try {
-                let subcat;
-                for (const cat of categories) {
-                    subcat = cat.subcategories.find(s => s.id === subcatId);
-                    if (subcat) break;
-                }
-                if (!subcat) return;
-                const newUrl = {
-                    id: generateId('url'),
-                    name: '新网站',
-                    url: 'https://example.com',
-                    desc: '网站描述',
-                    icon: getFaviconUrl('https://example.com'),
-                    isEditing: true
-                };
-                subcat.urls.push(newUrl);
-                isDataSaved = false;
-                saveCategories();
-                renderCategories();
-            } catch (e) {
-                console.error('AddSubUrl Error:', e);
+            let subcat;
+            for (const cat of categories) {
+                subcat = cat.subcategories.find(s => s.id === subcatId);
+                if (subcat) break;
             }
+            if (!subcat) return;
+            const newUrl = {
+                id: generateId('url'),
+                name: '新网站',
+                url: 'https://example.com',
+                desc: '网站描述',
+                icon: getFaviconUrl('https://example.com'),
+                isEditing: true
+            };
+            subcat.urls.push(newUrl);
+            isDataSaved = false;
+            saveCategories();
+            renderCategories();
         }
 
         function debounce(func, wait) {
@@ -1630,30 +1346,14 @@
         }, 200));
 
         document.addEventListener('DOMContentLoaded', () => {
-            try {
-                const sidebar = document.getElementById('sidebar');
-                if (!sidebar) {
-                    console.error('Sidebar element not found on DOM load');
-                    return;
-                }
-                if (window.innerWidth <= 767) {
-                    sidebar.classList.add('expanded');
-                }
-                renderCategories();
-                renderNav();
-                fixMobileKeyboard();
-            } catch (e) {
-                console.error('DOMContentLoaded Error:', e);
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 767) {
+                sidebar.classList.add('expanded');
             }
-        });
-
-        try {
-            console.log('Script loaded');
             renderCategories();
             renderNav();
-        } catch (e) {
-            console.error('Initial render failed:', e);
-        }
+            fixMobileKeyboard();
+        });
     </script>
 </body>
 </html>
