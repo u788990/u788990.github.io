@@ -637,7 +637,17 @@
         function loadCategories() {
             try {
                 const saved = localStorage.getItem(storageKey);
-                return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultCategories));
+                const loadedCategories = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultCategories));
+                // Reset isEditing to false on load to prevent persistence after refresh
+                loadedCategories.forEach(cat => {
+                    cat.isEditing = false;
+                    cat.urls.forEach(url => url.isEditing = false);
+                    cat.subcategories.forEach(subcat => {
+                        subcat.isEditing = false;
+                        subcat.urls.forEach(url => url.isEditing = false);
+                    });
+                });
+                return loadedCategories;
             } catch (e) {
                 console.error('LoadCategories Error:', e);
                 return JSON.parse(JSON.stringify(defaultCategories));
@@ -646,7 +656,17 @@
 
         function saveCategories() {
             try {
-                localStorage.setItem(storageKey, JSON.stringify(categories));
+                // Create a copy of categories with isEditing reset to false
+                const categoriesToSave = JSON.parse(JSON.stringify(categories));
+                categoriesToSave.forEach(cat => {
+                    cat.isEditing = false;
+                    cat.urls.forEach(url => url.isEditing = false);
+                    cat.subcategories.forEach(subcat => {
+                        subcat.isEditing = false;
+                        subcat.urls.forEach(url => url.isEditing = false);
+                    });
+                });
+                localStorage.setItem(storageKey, JSON.stringify(categoriesToSave));
             } catch (e) {
                 console.error('SaveCategories Error:', e);
                 alert('无法保存数据，可能是存储空间不足或浏览器设置限制。');
@@ -713,11 +733,11 @@
             reader.onload = function(event) {
                 try {
                     categories = JSON.parse(event.target.result);
-                    isDataSaved = false;
                     saveCategories();
                     renderCategories();
                     renderNav();
                     alert('数据已从备份还原！');
+                    // Do not set isDataSaved = false; allow exit without saving
                 } catch (err) {
                     console.error('Load Error:', err);
                     alert('加载失败，无效的JSON文件。');
@@ -745,11 +765,11 @@
                     .then(data => {
                         try {
                             categories = JSON.parse(data);
-                            isDataSaved = false;
                             saveCategories();
                             renderCategories();
                             renderNav();
                             alert('成功还原！');
+                            // Do not set isDataSaved = false; allow exit without saving
                         } catch (err) {
                             console.error('Parse Error:', err);
                             alert('加载失败，无效的JSON文件。');
@@ -1193,9 +1213,10 @@
                     if (isEditMode && cat.isEditing) {
                         const nameInput = catDiv.querySelector(`#cat-name-${cat.id}`);
                         if (nameInput) {
+                            const originalName = cat.name;
                             nameInput.oninput = e => {
                                 cat.name = e.target.value;
-                                isDataSaved = false;
+                                if (cat.name !== originalName) isDataSaved = false;
                             };
                         }
                     }
@@ -1241,11 +1262,18 @@
                         alert('退出失败，请先完成编辑！');
                         return;
                     }
-                    if (!isDataSaved) {
-                        alert('数据未保存，请点击“保存备份”后再退出！');
-                        return;
-                    }
+                    // Allow exit without saving if no meaningful changes
                     isEditMode = false;
+                    // Reset isEditing states
+                    categories.forEach(cat => {
+                        cat.isEditing = false;
+                        cat.urls.forEach(url => url.isEditing = false);
+                        cat.subcategories.forEach(subcat => {
+                            subcat.isEditing = false;
+                            subcat.urls.forEach(url => url.isEditing = false);
+                        });
+                    });
+                    saveCategories();
                 } else {
                     isEditMode = true;
                 }
@@ -1304,10 +1332,19 @@
                 if (!cat) return;
                 if (cat.isEditing) {
                     const nameInput = document.getElementById(`cat-name-${id}`);
-                    if (nameInput) cat.name = nameInput.value;
+                    if (nameInput) {
+                        const newName = nameInput.value;
+                        if (newName !== cat.originalName) {
+                            cat.name = newName;
+                            isDataSaved = false;
+                        }
+                    }
+                    delete cat.originalName;
+                    cat.isEditing = false;
+                } else {
+                    cat.originalName = cat.name;
+                    cat.isEditing = true;
                 }
-                cat.isEditing = !cat.isEditing;
-                isDataSaved = false;
                 saveCategories();
                 renderCategories();
                 renderNav();
@@ -1414,14 +1451,27 @@
                     const urlInput = document.getElementById(`url-url-${id}`);
                     const descInput = document.getElementById(`url-desc-${id}`);
                     if (nameInput && urlInput && descInput) {
-                        url.name = nameInput.value;
-                        url.url = urlInput.value;
-                        url.desc = descInput.value;
-                        url.icon = getFaviconUrl(urlInput.value);
+                        const newName = nameInput.value;
+                        const newUrl = urlInput.value;
+                        const newDesc = descInput.value;
+                        if (newName !== url.originalName || newUrl !== url.originalUrl || newDesc !== url.originalDesc) {
+                            url.name = newName;
+                            url.url = newUrl;
+                            url.desc = newDesc;
+                            url.icon = getFaviconUrl(newUrl);
+                            isDataSaved = false;
+                        }
                     }
+                    delete url.originalName;
+                    delete url.originalUrl;
+                    delete url.originalDesc;
+                    url.isEditing = false;
+                } else {
+                    url.originalName = url.name;
+                    url.originalUrl = url.url;
+                    url.originalDesc = url.desc;
+                    url.isEditing = true;
                 }
-                url.isEditing = !url.isEditing;
-                isDataSaved = false;
                 saveCategories();
                 renderCategories();
             } catch (e) {
@@ -1485,10 +1535,19 @@
                 if (!subcat) return;
                 if (subcat.isEditing) {
                     const nameInput = document.getElementById(`subcat-name-${id}`);
-                    if (nameInput) subcat.name = nameInput.value;
+                    if (nameInput) {
+                        const newName = nameInput.value;
+                        if (newName !== subcat.originalName) {
+                            subcat.name = newName;
+                            isDataSaved = false;
+                        }
+                    }
+                    delete subcat.originalName;
+                    subcat.isEditing = false;
+                } else {
+                    subcat.originalName = subcat.name;
+                    subcat.isEditing = true;
                 }
-                subcat.isEditing = !subcat.isEditing;
-                isDataSaved = false;
                 saveCategories();
                 renderCategories();
                 renderNav();
