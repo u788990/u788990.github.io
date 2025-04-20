@@ -120,16 +120,8 @@
         .save-btn:hover, .restore-btn:hover, .update-btn:hover, .download-btn:hover {
             background: #e0a800;
         }
-        .save-btn.blink {
-            animation: blink 0.6s ease-in-out 3; /* 闪烁3次，每次0.6秒 */
-        }
-        @keyframes blink {
-            0%, 100% {
-                background: #ffc107;
-            }
-            50% {
-                background: #ffeb3b;
-            }
+        .highlight-area {
+            background: #ffc107 !important; /* 黄色背景 */
         }
         #data-file {
             display: none;
@@ -603,7 +595,6 @@
                 e.stopPropagation();
                 const input = e.target;
                 input.focus();
-                // 手机端点击输入框时收缩侧边栏
                 const sidebar = document.getElementById('sidebar');
                 const toggleBtn = document.querySelector('.toggle-sidebar');
                 if (sidebar.classList.contains('expanded')) {
@@ -700,6 +691,8 @@
             a.click();
             URL.revokeObjectURL(url);
             isDataSaved = true;
+            // 清除所有高亮区域
+            document.querySelectorAll('.highlight-area').forEach(el => el.classList.remove('highlight-area'));
             saveCategories();
             alert(`数据已保存为 ${filename}！请保存到 HTML 文件目录。`);
         }
@@ -898,6 +891,61 @@
             );
         }
 
+        function highlightUnsavedAreas() {
+            // 移除所有现有高亮
+            document.querySelectorAll('.highlight-area').forEach(el => el.classList.remove('highlight-area'));
+            let firstHighlighted = false;
+            // 检查未保存的区域
+            categories.forEach(cat => {
+                if (cat.isEditing) {
+                    const catDiv = document.getElementById(cat.id);
+                    if (catDiv) {
+                        catDiv.classList.add('highlight-area');
+                        if (!firstHighlighted) {
+                            catDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            firstHighlighted = true;
+                        }
+                    }
+                }
+                cat.urls.forEach(url => {
+                    if (url.isEditing) {
+                        const urlDiv = document.querySelector(`.url:has(#url-name-${url.id})`);
+                        if (urlDiv) {
+                            urlDiv.classList.add('highlight-area');
+                            if (!firstHighlighted) {
+                                urlDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                firstHighlighted = true;
+                            }
+                        }
+                    }
+                });
+                cat.subcategories.forEach(subcat => {
+                    if (subcat.isEditing) {
+                        const subcatDiv = document.getElementById(subcat.id);
+                        if (subcatDiv) {
+                            subcatDiv.classList.add('highlight-area');
+                            if (!firstHighlighted) {
+                                subcatDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                firstHighlighted = true;
+                            }
+                        }
+                    }
+                    subcat.urls.forEach(url => {
+                        if (url.isEditing) {
+                            const urlDiv = document.querySelector(`.url:has(#url-name-${url.id})`);
+                            if (urlDiv) {
+                                urlDiv.classList.add('highlight-area');
+                                if (!firstHighlighted) {
+                                    urlDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    firstHighlighted = true;
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
         function renderNav() {
             const nav = document.getElementById('nav');
             nav.innerHTML = '';
@@ -1087,16 +1135,13 @@
                     }
                 }
                 if (hasEditing) {
-                    alert('退出失败，请先完成编辑！');
+                    highlightUnsavedAreas();
+                    alert('有未保存的更改！请检查黄色背景的区域并保存后再退出。');
                     return;
                 }
                 if (!isDataSaved) {
-                    const saveBtn = document.querySelector('.save-btn');
-                    if (saveBtn) {
-                        saveBtn.classList.add('blink');
-                        setTimeout(() => saveBtn.classList.remove('blink'), 2000); // 移除闪烁类
-                    }
-                    alert('有未保存的更改！请点击“保存备份”按钮保存后再退出。');
+                    highlightUnsavedAreas();
+                    alert('有未保存的更改！请检查黄色背景的区域并保存后再退出。');
                     return;
                 }
                 isEditMode = false;
