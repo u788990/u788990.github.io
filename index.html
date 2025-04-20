@@ -487,8 +487,32 @@
                 font-size: 1.8rem; /* 手机端标题保持1.8rem */
             }
 
+            /* 分类名称字体减小30% */
+            .category h2 {
+                font-size: 1.26rem; /* 原1.8rem（假设h2默认继承1.8rem）减小30% */
+            }
+
+            .subcategory h4 {
+                font-size: 0.98rem; /* 原1.4rem（假设h4默认继承1.4rem）减小30% */
+            }
+
+            /* 网址字体减小20% */
+            .url-name {
+                font-size: 0.7rem; /* 原0.875rem减小20% */
+            }
+
+            .url-desc {
+                font-size: 0.6rem; /* 原0.75rem减小20% */
+            }
+
+            /* 网址图标减小50% */
+            .url img {
+                max-height: 17px; /* 原34px减小50% */
+            }
+
+            /* 一行显示三个网址 */
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                grid-template-columns: repeat(3, 1fr); /* 固定三列 */
                 gap: 0.5rem;
             }
 
@@ -500,7 +524,26 @@
 
         @media (max-width: 480px) {
             .urls {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                grid-template-columns: repeat(3, 1fr); /* 继续保持三列 */
+                gap: 0.3rem; /* 减小间距以适应小屏幕 */
+            }
+
+            .url {
+                padding: 0.2rem; /* 减小内边距 */
+                min-height: 50px; /* 减小最小高度 */
+            }
+
+            .url-name {
+                font-size: 0.65rem; /* 进一步减小字体 */
+                white-space: normal; /* 允许换行 */
+            }
+
+            .url-desc {
+                font-size: 0.55rem; /* 进一步减小字体 */
+            }
+
+            .url img {
+                max-height: 15px; /* 进一步减小图标 */
             }
 
             button {
@@ -537,7 +580,7 @@
         </div>
         <div id="credit-text">
             <span class="text-part">创意制作</span>
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjA4IiBoZWlnaHQ9IjM5IiB2aWV3Qm94PSIwIDAgMjA4IDM5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIyMDgiIGhlaWdodD0iMzkiIGZpbGw9IiMwMDhFMzgiLz4KICA8dGV4dCB4PSIxMDQiIHk9IjI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIE1pY3Jvc29mdCBZYUhlaSwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iI0ZGRkZGRiI+dTc4OTkwOEAxNjMuY29tPC90ZXh0Pgo8L3N2Zz4=" alt="u789908@163.com">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjA4IiBoZWlnaHQ9IjM5IiB2aWV3Qm94PSIwIDAgMjA4IDM5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIyMDgiIGhlaWdodD0iMzkiIGZpbGw9IiMwMDhFMzgiLz4KICA8dGV4dCB4PSIxMDQiIHk9IjI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIE1pY3Jvc29mdCBZYUhlaSwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iI0ZGRkZGRiI+dTc4ODk5MEAxNjMuY29tPC90ZXh0Pgo8L3N2Zz4=" alt="u788990@163.com">
         </div>
         <div class="button-group">
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
