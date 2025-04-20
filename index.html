@@ -533,6 +533,7 @@
         let categories = loadCategories();
         let isEditMode = false;
         let isDataSaved = true;
+        let unsavedAreas = []; // 记录未保存区域
 
         function loadCategories() {
             const saved = localStorage.getItem(storageKey);
@@ -611,6 +612,7 @@
             }
 
             function handleInput(e) {
+                isDataSaved = false;
                 const input = e.target;
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
@@ -632,6 +634,8 @@
             reader.onload = function(event) {
                 try {
                     categories = JSON.parse(event.target.result);
+                    isDataSaved = true;
+                    unsavedAreas = [];
                     saveCategories();
                     renderCategories();
                     renderNav();
@@ -660,6 +664,8 @@
                 })
                 .then(data => {
                     categories = JSON.parse(data);
+                    isDataSaved = true;
+                    unsavedAreas = [];
                     saveCategories();
                     renderCategories();
                     renderNav();
@@ -691,6 +697,16 @@
             a.click();
             URL.revokeObjectURL(url);
             isDataSaved = true;
+            unsavedAreas = [];
+            // 强制重置所有 isEditing 状态
+            categories.forEach(cat => {
+                cat.isEditing = false;
+                cat.urls.forEach(url => url.isEditing = false);
+                cat.subcategories.forEach(subcat => {
+                    subcat.isEditing = false;
+                    subcat.urls.forEach(url => url.isEditing = false);
+                });
+            });
             // 清除所有高亮区域
             document.querySelectorAll('.highlight-area').forEach(el => el.classList.remove('highlight-area'));
             saveCategories();
@@ -892,8 +908,9 @@
         }
 
         function highlightUnsavedAreas() {
-            // 移除所有现有高亮
+            // 清除现有高亮
             document.querySelectorAll('.highlight-area').forEach(el => el.classList.remove('highlight-area'));
+            unsavedAreas = [];
             let firstHighlighted = false;
             // 检查未保存的区域
             categories.forEach(cat => {
@@ -901,6 +918,7 @@
                     const catDiv = document.getElementById(cat.id);
                     if (catDiv) {
                         catDiv.classList.add('highlight-area');
+                        unsavedAreas.push({ type: 'category', id: cat.id });
                         if (!firstHighlighted) {
                             catDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             firstHighlighted = true;
@@ -912,6 +930,7 @@
                         const urlDiv = document.querySelector(`.url:has(#url-name-${url.id})`);
                         if (urlDiv) {
                             urlDiv.classList.add('highlight-area');
+                            unsavedAreas.push({ type: 'url', id: url.id });
                             if (!firstHighlighted) {
                                 urlDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 firstHighlighted = true;
@@ -924,6 +943,7 @@
                         const subcatDiv = document.getElementById(subcat.id);
                         if (subcatDiv) {
                             subcatDiv.classList.add('highlight-area');
+                            unsavedAreas.push({ type: 'subcategory', id: subcat.id });
                             if (!firstHighlighted) {
                                 subcatDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 firstHighlighted = true;
@@ -935,6 +955,7 @@
                             const urlDiv = document.querySelector(`.url:has(#url-name-${url.id})`);
                             if (urlDiv) {
                                 urlDiv.classList.add('highlight-area');
+                                unsavedAreas.push({ type: 'url', id: url.id });
                                 if (!firstHighlighted) {
                                     urlDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                     firstHighlighted = true;
@@ -943,6 +964,19 @@
                         }
                     });
                 });
+            });
+        }
+
+        function reapplyHighlights() {
+            // 重新应用高亮
+            unsavedAreas.forEach(area => {
+                if (area.type === 'category' || area.type === 'subcategory') {
+                    const div = document.getElementById(area.id);
+                    if (div) div.classList.add('highlight-area');
+                } else if (area.type === 'url') {
+                    const urlDiv = document.querySelector(`.url:has(#url-name-${area.id})`);
+                    if (urlDiv) urlDiv.classList.add('highlight-area');
+                }
             });
         }
 
@@ -1105,6 +1139,8 @@
             if (updateInput) updateInput.className = `${isEditMode ? '' : 'hidden'}`;
             const updateBtn = document.querySelector('.update-btn');
             if (updateBtn) updateBtn.className = `update-btn ${isEditMode ? '' : 'hidden'}`;
+            // 重新应用高亮
+            reapplyHighlights();
             fixMobileKeyboard();
             if (activeElementId) {
                 const activeElement = document.getElementById(activeElementId);
@@ -1120,39 +1156,46 @@
         function toggleMode() {
             if (isEditMode) {
                 let hasEditing = false;
+                const editingItems = [];
                 for (const cat of categories) {
                     if (cat.isEditing) {
                         hasEditing = true;
-                        break;
+                        editingItems.push(`Category: ${cat.name}`);
                     }
-                    if (cat.urls.some(url => url.isEditing)) {
-                        hasEditing = true;
-                        break;
+                    for (const url of cat.urls) {
+                        if (url.isEditing) {
+                            hasEditing = true;
+                            editingItems.push(`URL in ${cat.name}: ${url.name}`);
+                        }
                     }
-                    if (cat.subcategories.some(subcat => subcat.isEditing || subcat.urls.some(url => url.isEditing))) {
-                        hasEditing = true;
-                        break;
+                    for (const subcat of cat.subcategories) {
+                        if (subcat.isEditing) {
+                            hasEditing = true;
+                            editingItems.push(`Subcategory in ${cat.name}: ${subcat.name}`);
+                        }
+                        for (const url of subcat.urls) {
+                            if (url.isEditing) {
+                                hasEditing = true;
+                                editingItems.push(`URL in ${cat.name} > ${subcat.name}: ${url.name}`);
+                            }
+                        }
                     }
                 }
                 if (hasEditing) {
+                    console.log('Unsaved items:', editingItems); // 调试日志
                     highlightUnsavedAreas();
                     alert('有未保存的更改！请检查黄色背景的区域并保存后再退出。');
                     return;
                 }
                 if (!isDataSaved) {
+                    console.log('Data not saved, but no editing items found.'); // 调试日志
                     highlightUnsavedAreas();
                     alert('有未保存的更改！请检查黄色背景的区域并保存后再退出。');
                     return;
                 }
                 isEditMode = false;
-                categories.forEach(cat => {
-                    cat.isEditing = false;
-                    cat.urls.forEach(url => url.isEditing = false);
-                    cat.subcategories.forEach(subcat => {
-                        subcat.isEditing = false;
-                        subcat.urls.forEach(url => url.isEditing = false);
-                    });
-                });
+                unsavedAreas = [];
+                document.querySelectorAll('.highlight-area').forEach(el => el.classList.remove('highlight-area'));
                 saveCategories();
             } else {
                 isEditMode = true;
@@ -1179,7 +1222,7 @@
             categories.push({
                 id: generateId('cat'),
                 name: '新分类',
-                isEditing: false,
+                isEditing: true, // 新增时进入编辑状态
                 urls: [],
                 subcategories: []
             });
@@ -1292,11 +1335,16 @@
                 const urlInput = document.getElementById(`url-url-${id}`);
                 const descInput = document.getElementById(`url-desc-${id}`);
                 if (nameInput && urlInput && descInput) {
-                    url.name = nameInput.value;
-                    url.url = urlInput.value;
-                    url.desc = descInput.value;
-                    url.icon = getFaviconUrl(url.url);
-                    isDataSaved = false;
+                    const newName = nameInput.value;
+                    const newUrl = urlInput.value;
+                    const newDesc = descInput.value;
+                    if (newName !== url.name || newUrl !== url.url || newDesc !== url.desc) {
+                        url.name = newName;
+                        url.url = newUrl;
+                        url.desc = newDesc;
+                        url.icon = getFaviconUrl(url.url);
+                        isDataSaved = false;
+                    }
                 }
                 url.isEditing = false;
             } else {
@@ -1306,7 +1354,13 @@
             renderCategories();
             if (url.isEditing) {
                 const nameInput = document.getElementById(`url-name-${id}`);
-                if (nameInput) nameInput.focus();
+                if (nameInput) {
+                    nameInput.focus();
+                    // 为网址输入框绑定实时 input 事件
+                    nameInput.addEventListener('input', () => { isDataSaved = false; });
+                    document.getElementById(`url-url-${id}`)?.addEventListener('input', () => { isDataSaved = false; });
+                    document.getElementById(`url-desc-${id}`)?.addEventListener('input', () => { isDataSaved = false; });
+                }
             }
         }
 
@@ -1339,7 +1393,7 @@
             cat.subcategories.push({
                 id: generateId('subcat'),
                 name: '新子分类',
-                isEditing: false,
+                isEditing: true, // 新增时进入编辑状态
                 urls: []
             });
             isDataSaved = false;
@@ -1413,9 +1467,25 @@
             };
         }
 
+        // 优化 resize 事件，减少不必要渲染
+        let lastWidth = window.innerWidth;
+        let lastHeight = window.innerHeight;
         window.addEventListener('resize', debounce(() => {
-            renderCategories();
+            if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
+                lastWidth = window.innerWidth;
+                lastHeight = window.innerHeight;
+                renderCategories();
+            }
         }, 200));
+
+        // 监听滚动事件，重新应用高亮
+        if (isMobileDevice()) {
+            window.addEventListener('scroll', debounce(() => {
+                if (unsavedAreas.length > 0) {
+                    reapplyHighlights();
+                }
+            }, 100));
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('sidebar');
