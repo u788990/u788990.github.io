@@ -673,39 +673,28 @@
         function fixMobileKeyboard() {
             const inputs = document.querySelectorAll('input, textarea');
             inputs.forEach(input => {
-                input.addEventListener('touchstart', (e) => {
-                    e.stopPropagation();
-                    input.focus();
-                }, { passive: false });
+                // Remove existing listeners to prevent duplicates
+                input.removeEventListener('touchstart', handleTouchStart);
+                input.removeEventListener('focus', handleFocus);
 
-                input.addEventListener('focus', () => {
-                    // Ensure input stays in view and keyboard remains active
-                    setTimeout(() => {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        // Force focus to persist
-                        input.focus();
-                        // Adjust viewport to prevent zoom or scroll issues
-                        document.body.style.overflow = 'hidden';
-                        setTimeout(() => {
-                            document.body.style.overflow = '';
-                        }, 500);
-                    }, 200); // Increased timeout to account for keyboard animation
-                });
-
-                input.addEventListener('blur', () => {
-                    // Restore normal scrolling behavior
-                    document.body.style.overflow = '';
-                });
+                // Add touchstart to ensure focus
+                input.addEventListener('touchstart', handleTouchStart, { passive: false });
+                // Add focus to keep keyboard active
+                input.addEventListener('focus', handleFocus);
             });
 
-            // Prevent document-level touch events from dismissing keyboard
-            document.addEventListener('touchstart', (e) => {
-                if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-                    // Allow touch events outside inputs to proceed normally
-                    return;
-                }
+            function handleTouchStart(e) {
                 e.stopPropagation();
-            }, { passive: false });
+                e.target.focus();
+            }
+
+            function handleFocus(e) {
+                const input = e.target;
+                setTimeout(() => {
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    input.focus();
+                }, 300); // Delay to account for keyboard animation
+            }
         }
 
         document.getElementById('data-file').addEventListener('change', function(e) {
@@ -1213,6 +1202,9 @@
                 if (updateInput) updateInput.className = `${isEditMode ? '' : 'hidden'}`;
                 const updateBtn = document.querySelector('.update-btn');
                 if (updateBtn) updateBtn.className = `update-btn ${isEditMode ? '' : 'hidden'}`;
+
+                // Apply fixMobileKeyboard to all inputs after rendering
+                fixMobileKeyboard();
             } catch (e) {
                 console.error('RenderCategories Error:', e);
             }
