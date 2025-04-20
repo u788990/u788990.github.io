@@ -136,7 +136,7 @@
             background: #138496;
         }
 
-        .save-btn, .restore-btn, .update-btn {
+        .save-btn, .restore-btn, .update-btn, .download-btn {
             padding: 0.5rem 0.75rem;
             border: none;
             border-radius: 4px;
@@ -146,7 +146,7 @@
             transition: background 0.2s;
         }
 
-        .save-btn:hover, .restore-btn:hover, .update-btn:hover {
+        .save-btn:hover, .restore-btn:hover, .update-btn:hover, .download-btn:hover {
             background: #e0a800;
         }
 
@@ -170,6 +170,7 @@
             align-items: center; /* 文本和图像整体垂直居中 */
             clear: both; /* 清除浮动，确保在h1下方 */
             gap: 10px; /* 文本和图像间距 */
+            flex-wrap: wrap; /* 允许换行以适应小屏幕 */
         }
 
         #credit-text .text-part {
@@ -505,9 +506,9 @@
                 font-size: 0.6rem; /* 原0.75rem减小20% */
             }
 
-            /* 网址图标减小50% */
+            /* 网址图标减小30% */
             .url img {
-                max-height: 17px; /* 原34px减小50% */
+                max-height: 24px; /* 原34px减小30% */
             }
 
             /* 一行显示三个网址 */
@@ -543,7 +544,7 @@
             }
 
             .url img {
-                max-height: 15px; /* 进一步减小图标 */
+                max-height: 22px; /* 原34px减小约35%，稍大于30%以适应小屏幕 */
             }
 
             button {
@@ -581,6 +582,7 @@
         <div id="credit-text">
             <span class="text-part">创意制作</span>
             <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjA4IiBoZWlnaHQ9IjM5IiB2aWV3Qm94PSIwIDAgMjA4IDM5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIyMDgiIGhlaWdodD0iMzkiIGZpbGw9IiMwMDhFMzgiLz4KICA8dGV4dCB4PSIxMDQiIHk9IjI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIE1pY3Jvc29mdCBZYUhlaSwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iI0ZGRkZGRiI+dTc4ODk5MEAxNjMuY29tPC90ZXh0Pgo8L3N2Zz4=" alt="u788990@163.com">
+            <button class="download-btn" onclick="downloadPage()">下载到本地应用</button>
         </div>
         <div class="button-group">
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
@@ -649,6 +651,39 @@
                 console.error('SaveCategories Error:', e);
                 alert('无法保存数据，可能是存储空间不足或浏览器设置限制。');
             }
+        }
+
+        function downloadPage() {
+            try {
+                const htmlContent = document.documentElement.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'BieKuai_Navigation.html';
+                a.click();
+                URL.revokeObjectURL(url);
+                alert('网页已开始下载为 BieKuai_Navigation.html');
+            } catch (e) {
+                console.error('DownloadPage Error:', e);
+                alert('下载失败，请检查控制台！');
+            }
+        }
+
+        function fixMobileKeyboard() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    setTimeout(() => {
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        input.focus();
+                    }, 100);
+                });
+                input.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                    input.focus();
+                });
+            });
         }
 
         document.getElementById('data-file').addEventListener('change', function(e) {
@@ -1506,6 +1541,7 @@
                 }
                 renderCategories();
                 renderNav();
+                fixMobileKeyboard();
             } catch (e) {
                 console.error('DOMContentLoaded Error:', e);
             }
