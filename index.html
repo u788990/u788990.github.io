@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <title>个人网址导航 - BieKuai</title>
@@ -588,7 +588,7 @@
             <button class="save-btn hidden" onclick="saveData()">保存备份</button>
             <button class="restore-btn hidden" onclick="document.getElementById('data-file').click()">还原备份</button>
             <input type="file" id="data-file" accept=".json">
-            <input type="text" id="update-file-input" class="hidden" placeholder="输入备份文件名">
+            <input type="text" id="update-file-input" class="hidden" placeholder="输入备份文件名" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
             <button class="update-btn hidden" onclick="updateOnline()">在线更新</button>
         </div>
         <div id="categories"></div>
@@ -700,9 +700,8 @@
             const inputs = document.querySelectorAll('input, textarea');
             inputs.forEach(input => {
                 // Remove existing listeners to prevent duplicates
-                input.removeEventListener('click', handleClick);
-                input.removeEventListener('touchend', handleTouchEnd);
-                input.removeEventListener('focus', handleFocus);
+                input.removeEventListener('touchstart', handleTouchStart);
+                input.removeEventListener('blur', handleBlur);
 
                 // Add mobile-specific attributes
                 if (input.tagName === 'INPUT') {
@@ -711,24 +710,14 @@
                 input.setAttribute('autocomplete', 'off');
                 input.setAttribute('autocapitalize', 'off');
                 input.setAttribute('autocorrect', 'off');
+                input.setAttribute('spellcheck', 'false');
 
                 // Add listeners
-                input.addEventListener('click', handleClick);
-                input.addEventListener('touchend', handleTouchEnd, { passive: false });
-                input.addEventListener('focus', handleFocus);
+                input.addEventListener('touchstart', handleTouchStart, { passive: false });
+                input.addEventListener('blur', handleBlur);
             });
 
-            function handleClick(e) {
-                const input = e.target;
-                setTimeout(() => {
-                    input.focus();
-                    if (input.value) {
-                        input.setSelectionRange(input.value.length, input.value.length);
-                    }
-                }, 0);
-            }
-
-            function handleTouchEnd(e) {
+            function handleTouchStart(e) {
                 e.stopPropagation();
                 const input = e.target;
                 setTimeout(() => {
@@ -736,20 +725,24 @@
                     if (input.value) {
                         input.setSelectionRange(input.value.length, input.value.length);
                     }
-                }, 100);
+                    // Start focus monitoring
+                    const focusCheck = setInterval(() => {
+                        if (document.activeElement !== input) {
+                            input.focus();
+                            if (input.value) {
+                                input.setSelectionRange(input.value.length, input.value.length);
+                            }
+                        }
+                    }, 50);
+                    // Stop monitoring after 1 second
+                    setTimeout(() => clearInterval(focusCheck), 1000);
+                }, 0);
             }
 
-            function handleFocus(e) {
+            function handleBlur(e) {
                 const input = e.target;
-                // Ensure cursor is at the end
-                setTimeout(() => {
-                    if (document.activeElement !== input) {
-                        input.focus();
-                    }
-                    if (input.value) {
-                        input.setSelectionRange(input.value.length, input.value.length);
-                    }
-                }, 100);
+                // Optional: Log blur events for debugging
+                // console.log('Input blurred:', input.id);
             }
         }
 
@@ -764,7 +757,6 @@
                     renderCategories();
                     renderNav();
                     alert('数据已从备份还原！');
-                    // Do not set isDataSaved = false; allow exit without saving
                 } catch (err) {
                     console.error('Load Error:', err);
                     alert('加载失败，无效的JSON文件。');
@@ -796,7 +788,6 @@
                             renderCategories();
                             renderNav();
                             alert('成功还原！');
-                            // Do not set isDataSaved = false; allow exit without saving
                         } catch (err) {
                             console.error('Parse Error:', err);
                             alert('加载失败，无效的JSON文件。');
@@ -1126,7 +1117,7 @@
                     catDiv.className = 'category';
                     catDiv.id = cat.id;
                     catDiv.innerHTML = `
-                        <h2>${isEditMode && cat.isEditing ? `<input type="text" value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称" autocomplete="off" autocapitalize="off" autocorrect="off">` : cat.name}</h2>
+                        <h2>${isEditMode && cat.isEditing ? `<input type="text" value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">` : cat.name}</h2>
                         <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditCategory('${cat.id}')">${cat.isEditing ? '保存' : '修改'}</button>
                         <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${cat.isEditing ? '' : 'disabled'}" onclick="deleteCategory('${cat.id}')">删除</button>
                         <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'up')" ${catIndex === 0 ? 'disabled' : ''}>上移</button>
@@ -1150,9 +1141,9 @@
                             ${isEditMode && url.isEditing ? `
                                 <div class="url-main">
                                     <div>
-                                        <input type="text" value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocomplete="off" autocapitalize="off" autocorrect="off">
-                                        <input type="text" value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocomplete="off" autocapitalize="off" autocorrect="off">
-                                        <textarea id="url-desc-${url.id}" placeholder="描述" autocomplete="off" autocapitalize="off" autocorrect="off">${url.desc}</textarea>
+                                        <input type="text" value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                                        <input type="text" value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                                        <textarea id="url-desc-${url.id}" placeholder="描述" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">${url.desc}</textarea>
                                     </div>
                                 </div>
                             ` : `
@@ -1187,7 +1178,7 @@
                         subcatDiv.className = 'subcategory';
                         subcatDiv.id = subcat.id;
                         subcatDiv.innerHTML = `
-                            <h4>${isEditMode && subcat.isEditing ? `<input type="text" value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称" autocomplete="off" autocapitalize="off" autocorrect="off">` : subcat.name}</h4>
+                            <h4>${isEditMode && subcat.isEditing ? `<input type="text" value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">` : subcat.name}</h4>
                             <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
                             <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
                             <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
@@ -1209,9 +1200,9 @@
                                 ${isEditMode && url.isEditing ? `
                                     <div class="url-main">
                                         <div>
-                                            <input type="text" value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocomplete="off" autocapitalize="off" autocorrect="off">
-                                            <input type="text" value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocomplete="off" autocapitalize="off" autocorrect="off">
-                                            <textarea id="url-desc-${url.id}" placeholder="描述" autocomplete="off" autocapitalize="off" autocorrect="off">${url.desc}</textarea>
+                                            <input type="text" value="${url.name}" id="url-name-${url.id}" placeholder="名称" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                                            <input type="text" value="${url.url}" id="url-url-${url.id}" placeholder="网址" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                                            <textarea id="url-desc-${url.id}" placeholder="描述" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">${url.desc}</textarea>
                                         </div>
                                     </div>
                                 ` : `
