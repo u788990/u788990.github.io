@@ -673,17 +673,39 @@
         function fixMobileKeyboard() {
             const inputs = document.querySelectorAll('input, textarea');
             inputs.forEach(input => {
-                input.addEventListener('focus', () => {
-                    setTimeout(() => {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        input.focus();
-                    }, 100);
-                });
                 input.addEventListener('touchstart', (e) => {
                     e.stopPropagation();
                     input.focus();
+                }, { passive: false });
+
+                input.addEventListener('focus', () => {
+                    // Ensure input stays in view and keyboard remains active
+                    setTimeout(() => {
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Force focus to persist
+                        input.focus();
+                        // Adjust viewport to prevent zoom or scroll issues
+                        document.body.style.overflow = 'hidden';
+                        setTimeout(() => {
+                            document.body.style.overflow = '';
+                        }, 500);
+                    }, 200); // Increased timeout to account for keyboard animation
+                });
+
+                input.addEventListener('blur', () => {
+                    // Restore normal scrolling behavior
+                    document.body.style.overflow = '';
                 });
             });
+
+            // Prevent document-level touch events from dismissing keyboard
+            document.addEventListener('touchstart', (e) => {
+                if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+                    // Allow touch events outside inputs to proceed normally
+                    return;
+                }
+                e.stopPropagation();
+            }, { passive: false });
         }
 
         document.getElementById('data-file').addEventListener('change', function(e) {
