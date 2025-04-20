@@ -676,11 +676,12 @@
                 // Remove existing listeners to prevent duplicates
                 input.removeEventListener('touchstart', handleTouchStart);
                 input.removeEventListener('focus', handleFocus);
+                input.removeEventListener('blur', handleBlur);
 
-                // Add touchstart to ensure focus
+                // Add listeners
                 input.addEventListener('touchstart', handleTouchStart, { passive: false });
-                // Add focus to keep keyboard active
                 input.addEventListener('focus', handleFocus);
+                input.addEventListener('blur', handleBlur);
             });
 
             function handleTouchStart(e) {
@@ -693,7 +694,17 @@
                 setTimeout(() => {
                     input.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     input.focus();
-                }, 300); // Delay to account for keyboard animation
+                }, 400); // Increased delay for keyboard animation
+            }
+
+            function handleBlur(e) {
+                const input = e.target;
+                // Immediately re-focus if blur occurs unexpectedly
+                setTimeout(() => {
+                    if (document.activeElement !== input) {
+                        input.focus();
+                    }
+                }, 100);
             }
         }
 
@@ -913,14 +924,14 @@
                         ${options.map(opt => `<option value="${opt.id}:${opt.type}:${opt.parentId || ''}">${opt.name}</option>`).join('')}
                     </select>
                     <div class="modal-actions">
-                        <button class="modal-confirm">确认</button>
+                        <button class="modal-confim">确认</button>
                         <button class="modal-cancel">取消</button>
                     </div>
                 </div>
             `;
             document.body.appendChild(modal);
 
-            const confirmBtn = modal.querySelector('.modal-confirm');
+            const confirmBtn = modal.querySelector('.modal-confim');
             const cancelBtn = modal.querySelector('.modal-cancel');
             const select = modal.querySelector('#modal-select');
 
@@ -1070,7 +1081,7 @@
                     catDiv.className = 'category';
                     catDiv.id = cat.id;
                     catDiv.innerHTML = `
-                        <h2>${cat.isEditing ? `<input value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称">` : cat.name}</h2>
+                        <h2>${isEditMode && cat.isEditing ? `<input value="${cat.name}" id="cat-name-${cat.id}" placeholder="分类名称">` : cat.name}</h2>
                         <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditCategory('${cat.id}')">${cat.isEditing ? '保存' : '修改'}</button>
                         <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${cat.isEditing ? '' : 'disabled'}" onclick="deleteCategory('${cat.id}')">删除</button>
                         <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveCategory('${cat.id}', 'up')" ${catIndex === 0 ? 'disabled' : ''}>上移</button>
@@ -1091,7 +1102,7 @@
                         const urlDiv = document.createElement('div');
                         urlDiv.className = 'url';
                         urlDiv.innerHTML = `
-                            ${url.isEditing ? `
+                            ${isEditMode && url.isEditing ? `
                                 <div class="url-main">
                                     <div>
                                         <input value="${url.name}" id="url-name-${url.id}" placeholder="名称">
@@ -1131,7 +1142,7 @@
                         subcatDiv.className = 'subcategory';
                         subcatDiv.id = subcat.id;
                         subcatDiv.innerHTML = `
-                            <h4>${subcat.isEditing ? `<input value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称">` : subcat.name}</h4>
+                            <h4>${isEditMode && subcat.isEditing ? `<input value="${subcat.name}" id="subcat-name-${subcat.id}" placeholder="子分类名称">` : subcat.name}</h4>
                             <button class="edit-btn ${isEditMode ? '' : 'hidden'}" onclick="toggleEditSubcategory('${subcat.id}')">${subcat.isEditing ? '保存' : '修改'}</button>
                             <button class="delete-btn ${isEditMode ? '' : 'hidden'} ${subcat.isEditing ? '' : 'disabled'}" onclick="deleteSubcategory('${subcat.id}')">删除</button>
                             <button class="move-btn ${isEditMode ? '' : 'hidden'}" onclick="moveSubcategory('${cat.id}', '${subcat.id}', 'up')" ${subcatIndex === 0 ? 'disabled' : ''}>上移</button>
@@ -1150,7 +1161,7 @@
                             const urlDiv = document.createElement('div');
                             urlDiv.className = 'url';
                             urlDiv.innerHTML = `
-                                ${url.isEditing ? `
+                                ${isEditMode && url.isEditing ? `
                                     <div class="url-main">
                                         <div>
                                             <input value="${url.name}" id="url-name-${url.id}" placeholder="名称">
@@ -1181,7 +1192,7 @@
                         });
                     });
 
-                    if (cat.isEditing) {
+                    if (isEditMode && cat.isEditing) {
                         const nameInput = catDiv.querySelector(`#cat-name-${cat.id}`);
                         if (nameInput) {
                             nameInput.oninput = e => {
