@@ -120,6 +120,17 @@
         .save-btn:hover, .restore-btn:hover, .update-btn:hover, .download-btn:hover {
             background: #e0a800;
         }
+        .save-btn.blink {
+            animation: blink 0.6s ease-in-out 3; /* 闪烁3次，每次0.6秒 */
+        }
+        @keyframes blink {
+            0%, 100% {
+                background: #ffc107;
+            }
+            50% {
+                background: #ffeb3b;
+            }
+        }
         #data-file {
             display: none;
         }
@@ -249,7 +260,7 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 0.875rem;
-            min-height: 36px; /* 手机端优化 */
+            min-height: 36px;
         }
         textarea {
             height: 60px;
@@ -592,6 +603,13 @@
                 e.stopPropagation();
                 const input = e.target;
                 input.focus();
+                // 手机端点击输入框时收缩侧边栏
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.querySelector('.toggle-sidebar');
+                if (sidebar.classList.contains('expanded')) {
+                    sidebar.classList.remove('expanded');
+                    toggleBtn.textContent = '▲';
+                }
             }
 
             function handleFocus(e) {
@@ -1070,6 +1088,15 @@
                 }
                 if (hasEditing) {
                     alert('退出失败，请先完成编辑！');
+                    return;
+                }
+                if (!isDataSaved) {
+                    const saveBtn = document.querySelector('.save-btn');
+                    if (saveBtn) {
+                        saveBtn.classList.add('blink');
+                        setTimeout(() => saveBtn.classList.remove('blink'), 2000); // 移除闪烁类
+                    }
+                    alert('有未保存的更改！请点击“保存备份”按钮保存后再退出。');
                     return;
                 }
                 isEditMode = false;
