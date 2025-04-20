@@ -1,0 +1,124 @@
+[
+  {
+    "id": "cat1",
+    "name": "常用网站",
+    "isEditing": false,
+    "urls": [
+      {
+        "id": "url1",
+        "name": "Google",
+        "url": "https://www.google.com",
+        "desc": "全球搜索引擎",
+        "icon": "https://www.google.com/favicon.ico",
+        "isEditing": false
+      },
+      {
+        "id": "url2",
+        "name": "GitHub",
+        "url": "https://github.com",
+        "desc": "代码托管平台",
+        "icon": "https://github.com/favicon.ico",
+        "isEditing": false
+      },
+      {
+        "id": "url-1745044249602-1m2bgju",
+        "name": "百度",
+        "url": "https://www.baidu.com/",
+        "desc": "大家都知道",
+        "icon": "https://www.baidu.com/favicon.ico",
+        "isEditing": false
+      },
+      {
+        "id": "url-1745044486573-p19urha",
+        "name": "openAI",
+        "url": "https://openai.com/",
+        "desc": "人工智能应用",
+        "icon": "https://openai.com/favicon.ico",
+        "isEditing": false
+      },
+      {
+        "id": "url-1745052000326-v5d9gls",
+        "name": "阿里云",
+        "url": "https://cn.aliyun.com/",
+        "desc": "域名空间云服务",
+        "icon": "https://cn.aliyun.com/favicon.ico",
+        "isEditing": false
+      }
+    ],
+    "subcategories": []
+  },
+  {
+    "id": "cat-1745044813252-vpajyc5",
+    "name": "邮箱空间",
+    "isEditing": false,
+    "urls": [
+      {
+        "id": "url-1745052646327-2qsmnbg",
+        "name": "cloudflare",
+        "url": "https://www.cloudflare.com/",
+        "desc": "CDN云加速度服务",
+        "icon": "https://www.cloudflare.com/favicon.ico",
+        "isEditing": false
+      }
+    ],
+    "subcategories": []
+  },
+  {
+    "id": "cat2",
+    "name": "学习资源",
+    "isEditing": false,
+    "urls": [],
+    "subcategories": [
+      {
+        "id": "subcat1",
+        "name": "编程教程",
+        "isEditing": false,
+        "urls": [
+          {
+            "id": "url3",
+            "name": "MDN",
+            "url": "https://developer.mozilla.org",
+            "desc": "Web开发文档",
+            "icon": "https://developer.mozilla.org/favicon.ico",
+            "isEditing": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cat-1745044724145-zjzvek7",
+    "name": "视频音乐",
+    "isEditing": false,
+    "urls": [],
+    "subcategories": []
+  },
+  {
+    "id": "cat-1745044757832-3rfvaqi",
+    "name": "在线工具",
+    "isEditing": false,
+    "urls": [],
+    "subcategories": []
+  },
+  {
+    "id": "cat-1745044851051-ovujuz5",
+    "name": "网络购物",
+    "isEditing": false,
+    "urls": [],
+    "subcategories": []
+  },
+  {
+    "id": "cat-1745044784290-jto8a2i",
+    "name": "资源下载",
+    "isEditing": false,
+    "urls": [],
+    "subcategories": []
+  },
+  {
+    "id": "cat-1745044967227-j2iduxu",
+    "name": "网络测试",
+    "isEditing": false,
+    "urls": [],
+    "subcategories": []
+  }
+]
